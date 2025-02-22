@@ -4,20 +4,24 @@ import com.example.skripsi.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import io.github.jan.supabase.postgrest.from
+import android.util.Log
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.builtin.Email
 
 class UserRepository {
 
-    suspend fun signUpUser(email: String, hashedPassword: String): Boolean {
+    suspend fun signUpUser(email: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                MyApp.supabase.from("users").insert(
-                    mapOf(
-                        "email" to email,
-                        "hashedPassword" to hashedPassword
-                    )
-                )
+                MyApp.supabase.auth.signUpWith(Email) {
+                    this.email = email
+                    this.password = password
+                }
+
+                Log.d("SupabaseSignUp", "Sign up successful for $email")
                 true
             } catch (e: Exception) {
+                Log.d("SupabaseSignUp", "Sign up failed: ${e.message}", e)
                 false
             }
         }

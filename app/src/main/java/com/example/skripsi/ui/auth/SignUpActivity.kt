@@ -5,10 +5,15 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.example.skripsi.R
 import com.example.skripsi.utils.isEmailValid
 import io.github.jan.supabase.createSupabaseClient
 import at.favre.lib.crypto.bcrypt.BCrypt
+import com.example.skripsi.data.repository.UserRepository
+import com.example.skripsi.viewmodel.AuthViewModel
+import com.example.skripsi.viewmodel.factory.AuthViewModelFactory
+
 //import com.example.skripsi.utils.isEmailValid
 
 
@@ -28,25 +33,34 @@ class SignUpActivity : AppCompatActivity() {
         val username = etUsername.text.toString().trim()
         val password = etPassword.text.toString().trim()
 
-        // Validate User Input
-        if (email == null || email == ""){
-            Toast.makeText(this, "Email has to be filled", Toast.LENGTH_SHORT).show()
-        }
+        val userRepository = UserRepository()
+        val authViewModel:AuthViewModel by viewModels {AuthViewModelFactory(userRepository)}
 
-        if (password == null || password == ""){
-            Toast.makeText(this, "Email has to be filled", Toast.LENGTH_SHORT).show()
-        }
+        // Validate User Input
+//        if (email == null || email == ""){
+//            Toast.makeText(this, "Email has to be filled", Toast.LENGTH_SHORT).show()
+//        }
+//
+//        if (password == null || password == ""){
+//            Toast.makeText(this, "Email has to be filled", Toast.LENGTH_SHORT).show()
+//        }
 
         // Hash Password
-
-        val hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray())
 
         // Pass Hashed Password to AuthViewModel
 
         // Handle Response
 
         // Navigate to Login
-
+        btnSignUp.setOnClickListener{
+            authViewModel.signUp(username, email, password) { success ->
+                if (success) {
+                    Toast.makeText(this, "Sign Up Successful!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Sign Up Failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
 
     }
