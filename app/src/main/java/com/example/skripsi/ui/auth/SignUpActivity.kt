@@ -2,6 +2,7 @@ package com.example.skripsi.ui.auth
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -29,9 +30,6 @@ class SignUpActivity : AppCompatActivity() {
         val btnSignUp = findViewById<Button>(R.id.btn_signup)
 
         // Retrieve User Input
-        val email = etEmail.text.toString().trim()
-        val username = etUsername.text.toString().trim()
-        val password = etPassword.text.toString().trim()
 
         val userRepository = UserRepository()
         val authViewModel:AuthViewModel by viewModels {AuthViewModelFactory(userRepository)}
@@ -53,6 +51,18 @@ class SignUpActivity : AppCompatActivity() {
 
         // Navigate to Login
         btnSignUp.setOnClickListener{
+
+            val email = etEmail.text.toString().trim()
+            val username = etUsername.text.toString().trim()
+            val password = etPassword.text.toString().trim()
+
+            Log.d("Supabase Sign Up", "Email sent: '$email'")
+
+            if (!isEmailValid(email)){
+                Toast.makeText(this, "invalid email format", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             authViewModel.signUp(username, email, password) { success ->
                 if (success) {
                     Toast.makeText(this, "Sign Up Successful!", Toast.LENGTH_SHORT).show()

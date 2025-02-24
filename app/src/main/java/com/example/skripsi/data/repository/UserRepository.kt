@@ -5,10 +5,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import io.github.jan.supabase.postgrest.from
 import android.util.Log
+import android.util.Patterns
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 
 class UserRepository {
+
 
     suspend fun signUpUser(email: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {
