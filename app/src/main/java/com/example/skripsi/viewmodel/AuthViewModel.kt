@@ -12,8 +12,14 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     fun signUp(username: String, email: String, password: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
-
             val success = userRepository.signUpUser(email, password)
+            onResult(success)
+        }
+    }
+
+    fun signIn(email: String, password: String, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val success = userRepository.signInUser(email, password)
             onResult(success)
         }
     }

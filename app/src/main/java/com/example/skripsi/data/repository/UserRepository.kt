@@ -19,7 +19,6 @@ class UserRepository {
                     this.email = email
                     this.password = password
                 }
-
                 Log.d("SupabaseSignUp", "Sign up successful for $email")
                 true
             } catch (e: Exception) {
@@ -29,4 +28,19 @@ class UserRepository {
         }
     }
 
+    suspend fun signInUser(email: String, password: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                MyApp.supabase.auth.signInWith(Email) {
+                    this.email = email
+                    this.password = password
+                }
+                Log.d("SupabaseSignIn", "Sign in successful for $email")
+                true
+            } catch (e: Exception) {
+                Log.d("SupabaseSignUp", "Sign up failed: ${e.message}", e)
+                false
+            }
+        }
+    }
 }
