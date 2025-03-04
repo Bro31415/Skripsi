@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Skripsi"
         tools:targetApi="31">
         <activity
-            android:name=".ui.auth.MenuActivity"
+            android:name=".ui.HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_menu"
             android:theme="@style/Theme.Skripsi" />
@@ -27,7 +27,7 @@
             android:name=".ui.auth.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.OnboardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

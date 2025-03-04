@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.skripsi.R
 import com.example.skripsi.data.repository.UserRepository
+import com.example.skripsi.ui.HomeActivity
 import com.example.skripsi.utils.isEmailValid
 import com.example.skripsi.viewmodel.AuthViewModel
 import com.example.skripsi.viewmodel.factory.AuthViewModelFactory
@@ -29,7 +30,7 @@ class SignInActivity : AppCompatActivity() {
         btnSignIn.setOnClickListener{
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
-            val intent = Intent(this, MenuActivity::class.java)
+            val intent = Intent(this, HomeActivity::class.java)
 
             if (!isEmailValid(email)){
                 Toast.makeText(this, "invalid email format", Toast.LENGTH_SHORT).show()
