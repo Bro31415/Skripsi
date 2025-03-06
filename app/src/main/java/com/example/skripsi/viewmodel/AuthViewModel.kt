@@ -13,6 +13,12 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     fun signUp(username: String, email: String, password: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
             val success = userRepository.signUpUser(email, password)
+            if (success) {
+                val createProfile = userRepository.createUserProfile(username)
+                onResult(createProfile)
+            } else {
+                onResult(false)
+            }
             onResult(success)
         }
     }
@@ -20,6 +26,13 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     fun signIn(email: String, password: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
             val success = userRepository.signInUser(email, password)
+            onResult(success)
+        }
+    }
+
+    fun createUser(username: String, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val success = userRepository.createUserProfile(username)
             onResult(success)
         }
     }

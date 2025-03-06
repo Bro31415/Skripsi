@@ -6,13 +6,20 @@ import kotlinx.coroutines.withContext
 import io.github.jan.supabase.postgrest.from
 import android.util.Log
 import android.util.Patterns
+import com.example.skripsi.data.model.User
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.postgrest.postgrest
+import io.ktor.util.reflect.instanceOf
+import java.lang.reflect.Array.set
 
 class UserRepository {
 
 
-    suspend fun signUpUser(email: String, password: String): Boolean {
+    suspend fun signUpUser(
+        email: String,
+        password: String
+    ): Boolean {
         return withContext(Dispatchers.IO) {
             try {
                 MyApp.supabase.auth.signUpWith(Email) {
@@ -28,7 +35,10 @@ class UserRepository {
         }
     }
 
-    suspend fun signInUser(email: String, password: String): Boolean {
+    suspend fun signInUser(
+        email: String,
+        password: String
+    ): Boolean {
         return withContext(Dispatchers.IO) {
             try {
                 MyApp.supabase.auth.signInWith(Email) {
@@ -39,6 +49,37 @@ class UserRepository {
                 true
             } catch (e: Exception) {
                 Log.d("SupabaseSignUp", "Sign up failed: ${e.message}", e)
+                false
+            }
+        }
+    }
+
+    suspend fun createUserProfile(
+        username: String
+    ): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val currentUser = MyApp.supabase.auth.currentUserOrNull()
+
+                val userId = currentUser?.id
+                val userEmail = currentUser?.email
+
+                if (userId == null || userEmail == null) {
+                    Log.e("UserProfile", "User not authenticated or missing information")
+                    return@withContext false
+                }
+
+                val createUser = User(
+                    id = userId,
+                    email = userEmail,
+                    username = username,
+                    xp = 0
+                )
+
+                MyApp.supabase.postgrest.from("users").insert(createUser)
+                true
+            } catch (e: Exception) {
+                Log.e("UserProfile", "Profile creation failed: ${e.message}")
                 false
             }
         }
