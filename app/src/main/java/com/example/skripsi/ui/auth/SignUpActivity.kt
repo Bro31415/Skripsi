@@ -62,7 +62,6 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this, "invalid email format", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            
 
             authViewModel.signUp(username, email, password) { success ->
                 if (success) {
