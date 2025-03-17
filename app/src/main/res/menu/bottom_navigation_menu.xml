@@ -5,24 +5,28 @@
         android:id="@+id/leaderboard"
         android:enabled="true"
         android:title="Papan Peringkat"
+        android:icon="@drawable/bold_cup"
         />
 
     <item
         android:id="@+id/course"
         android:enabled="true"
         android:title="Pembelajaran"
+        android:icon="@drawable/bold_book"
         />
 
     <item
         android:id="@+id/profile"
         android:enabled="true"
         android:title="Profil"
+        android:icon="@drawable/bold_user"
         />
 
     <item
         android:id="@+id/settings"
         android:enabled="true"
         android:title="Pengaturan"
+        android:icon="@drawable/bold_settings"
         />
 
 </menu>
