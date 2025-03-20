@@ -64,6 +64,7 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:realtime-kt")
 
 
+
     implementation("io.ktor:ktor-client-android:3.0.3") // http client & server framework untuk kotlin, intinya backbone untuk ngehubungin supabase sama project kotlin ini
     implementation("io.ktor:ktor-client-cio:3.0.3") // handle http network request
     implementation("io.ktor:ktor-client-content-negotiation:3.0.3") // serialize/deserialize json responses -> untuk parsing
@@ -75,4 +76,11 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //ini tambahan mungkin
+    implementation("io.ktor:ktor-client-android:3.0.3")
+    implementation("io.ktor:ktor-client-cio:3.0.3")
+    implementation("io.ktor:ktor-client-content-negotiation:3.0.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1")
+
 }

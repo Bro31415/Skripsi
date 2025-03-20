@@ -7,5 +7,5 @@ data class User(
     val id: String,
     val username: String,
     val email: String,
-    val xp: Int = 0 ,
+    val xp: Int? = null // Kolom xp diizinkan bernilai null (tambahan wil)
 )
