@@ -67,9 +67,17 @@
         android:id="@+id/btn_signin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="53dp"
         android:layout_marginHorizontal="80dp"
         android:layout_marginVertical="5dp"
         android:text="Sign In"
+        />
+
+    <Button
+        android:id="@+id/btn_forgotpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot Password"
         />
 
 </LinearLayout>

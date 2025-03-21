@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:text="Email"
         />
+
     <EditText
         android:id="@+id/et_email"
         android:layout_marginHorizontal="50dp"
@@ -38,6 +39,7 @@
         android:layout_height="wrap_content"
         android:hint="Email"
         />
+
     <TextView
         android:id="@+id/tv_password"
         android:layout_marginVertical="5dp"

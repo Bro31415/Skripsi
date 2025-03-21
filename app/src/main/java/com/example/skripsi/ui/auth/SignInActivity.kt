@@ -30,6 +30,7 @@ class SignInActivity : AppCompatActivity() {
 
         val btnSignIn = findViewById<Button>(R.id.btn_signin)
         val btnTogglePassword = findViewById<ImageButton>(R.id.btn_togglePassword)
+        val btnForgotPassword = findViewById<Button>(R.id.btn_forgotpassword)
 
         val userRepository = UserRepository()
         val authViewModel:AuthViewModel by viewModels {AuthViewModelFactory(userRepository)}
@@ -58,6 +59,13 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
         }
+
+        btnForgotPassword.setOnClickListener{
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+
+            startActivity(intent)
+        }
+
     }
 
     private fun togglePasswordVisibility(editText: EditText, imageButton: ImageButton) {

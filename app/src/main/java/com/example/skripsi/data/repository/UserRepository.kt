@@ -84,4 +84,15 @@ class UserRepository {
             }
         }
     }
+
+    suspend fun sendPasswordResetEmail(email: String): Result<Unit> {
+        return try {
+            withContext(Dispatchers.IO) {
+                MyApp.supabase.auth.resetPasswordForEmail(email)
+                Result.success(Unit)
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
