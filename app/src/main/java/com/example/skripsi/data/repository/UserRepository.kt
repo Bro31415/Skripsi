@@ -63,6 +63,7 @@ class UserRepository {
 
                 val userId = currentUser?.id
                 val userEmail = currentUser?.email
+                val createdAt = currentUser?.createdAt
 
                 if (userId == null || userEmail == null) {
                     Log.e("UserProfile", "User not authenticated or missing information")
@@ -73,7 +74,8 @@ class UserRepository {
                     id = userId,
                     email = userEmail,
                     username = username,
-                    xp = 0
+                    xp = 0,
+                    created_at = createdAt
                 )
 
                 MyApp.supabase.postgrest.from("users").insert(createUser)
