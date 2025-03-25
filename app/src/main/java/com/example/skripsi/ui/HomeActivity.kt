@@ -1,5 +1,6 @@
 package com.example.skripsi.ui
 
+
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.skripsi.R
 import com.example.skripsi.ui.leaderboard.LeaderboardFragment
 import com.example.skripsi.ui.course.CourseFragment
-import com.example.skripsi.ui.profile.ProfileFragment
+
 import com.example.skripsi.ui.settings.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
