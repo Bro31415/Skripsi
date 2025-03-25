@@ -1,10 +1,13 @@
 package com.example.skripsi.ui.auth
 
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.skripsi.R
@@ -19,7 +22,10 @@ import com.example.skripsi.viewmodel.factory.AuthViewModelFactory
 
 
 class SignUpActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+    private var isPasswordVisible = false
+
+        override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
@@ -28,8 +34,7 @@ class SignUpActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.et_password)
 
         val btnSignUp = findViewById<Button>(R.id.btn_signup)
-
-        // Retrieve User Input
+        val btnTogglePassword = findViewById<ImageButton>(R.id.btn_togglePassword)
 
         val userRepository = UserRepository()
         val authViewModel:AuthViewModel by viewModels {AuthViewModelFactory(userRepository)}
@@ -50,6 +55,12 @@ class SignUpActivity : AppCompatActivity() {
         // Handle Response
 
         // Navigate to Login
+
+        btnTogglePassword.setOnClickListener {
+            isPasswordVisible = !isPasswordVisible
+            togglePasswordVisibility(etPassword, btnTogglePassword)
+        }
+
         btnSignUp.setOnClickListener{
 
             val email = etEmail.text.toString().trim()
@@ -71,8 +82,19 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private fun togglePasswordVisibility(editText: EditText, imageButton: ImageButton) {
+        if (isPasswordVisible) {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            imageButton.setImageResource(R.drawable.bold_eye)
+        } else {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            imageButton.setImageResource(R.drawable.bold_eye_closed)
+        }
+        editText.setSelection(editText.text.length)
 
+        editText.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
 
 }
