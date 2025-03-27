@@ -15,21 +15,21 @@ class SettingsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_settings)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        val settingsList = listOf(
-            SettingsItem("Tema Aplikasi", R.drawable.ic_theme),
-            SettingsItem("Ukuran Font", R.drawable.ic_font),
-            SettingsItem("Notifikasi", R.drawable.ic_notifications),
-            SettingsItem("Ganti Password", R.drawable.ic_password),
-            SettingsItem("Reset Progress", R.drawable.ic_reset),
-            SettingsItem("Keluar dari Aplikasi", R.drawable.ic_logout)
-        )
-
-        recyclerView.adapter = SettingsAdapter(settingsList) { selectedItem ->
-            // Handle item click here (e.g., navigate to another fragment or show a dialog)
-        }
+       // val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_settings)
+//        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+//
+//        val settingsList = listOf(
+//            SettingsItem("Tema Aplikasi", R.drawable.ic_theme),
+//            SettingsItem("Ukuran Font", R.drawable.ic_font),
+//            SettingsItem("Notifikasi", R.drawable.ic_notifications),
+//            SettingsItem("Ganti Password", R.drawable.ic_password),
+//            SettingsItem("Reset Progress", R.drawable.ic_reset),
+//            SettingsItem("Keluar dari Aplikasi", R.drawable.ic_logout)
+//        )
+//
+//        recyclerView.adapter = SettingsAdapter(settingsList) { selectedItem ->
+//            // Handle item click here (e.g., navigate to another fragment or show a dialog)
+//        }
 
         return view
     }
@@ -39,27 +39,27 @@ class SettingsFragment : Fragment() {
 data class SettingsItem(val title: String, val iconRes: Int)
 
 // RecyclerView Adapter
-class SettingsAdapter(
-    private val items: List<SettingsItem>,
-    private val onItemClick: (SettingsItem) -> Unit
-) : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>() {
+//class SettingsAdapter(
+//    private val items: List<SettingsItem>,
+//    private val onItemClick: (SettingsItem) -> Unit
+//) : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>() {
+//
+//    inner class SettingsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+//        fun bind(item: SettingsItem) {
+//            itemView.findViewById<TextView>(R.id.text_setting).text = item.title
+//            itemView.findViewById<ImageView>(R.id.icon_setting).setImageResource(item.iconRes)
+//            itemView.setOnClickListener { onItemClick(item) }
+//        }
+//    }
+//
+//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
+//        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_setting, parent, false)
+//        return SettingsViewHolder(view)
+//    }
 
-    inner class SettingsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(item: SettingsItem) {
-            itemView.findViewById<TextView>(R.id.text_setting).text = item.title
-            itemView.findViewById<ImageView>(R.id.icon_setting).setImageResource(item.iconRes)
-            itemView.setOnClickListener { onItemClick(item) }
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_setting, parent, false)
-        return SettingsViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: SettingsViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
-
-    override fun getItemCount() = items.size
-}
+//    override fun onBindViewHolder(holder: SettingsViewHolder, position: Int) {
+//        holder.bind(items[position])
+//    }
+//
+//    override fun getItemCount() = items.size
+//}

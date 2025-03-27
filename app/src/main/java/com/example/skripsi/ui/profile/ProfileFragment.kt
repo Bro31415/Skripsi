@@ -17,6 +17,9 @@ import com.example.skripsi.viewmodel.AuthViewModel
 import com.example.skripsi.viewmodel.factory.AuthViewModelFactory
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class ProfileFragment : Fragment() {
 
@@ -40,6 +43,11 @@ class ProfileFragment : Fragment() {
                 if (user != null) {
                     Log.d("ProfileFragment", "User data retrieved: ${user.username}") // Periksa username
                     view.findViewById<TextView>(R.id.tv_username).text = user.username
+                    // format dan tampilan tahun user
+                    user.created_at?.let { instant ->
+                        val joinYear = formatInstantToYear(instant)
+                        view.findViewById<TextView>(R.id.tv_join_date).text = "Anggota sejak $joinYear"
+                    }
                     // Tombol untuk mengarahkan ke EditUsernameFragment
                     view.findViewById<Button>(R.id.btn_edit_username).setOnClickListener {
                         val editUsernameFragment = EditUsernameFragment().apply {
@@ -59,15 +67,11 @@ class ProfileFragment : Fragment() {
         } else {
             Log.e("ProfileFragment", "User not authenticated")
         }
-
-//        view.findViewById<Button>(R.id.btn_edit_username).setOnClickListener {
-//            val editUsernameFragment = EditUsernameFragment()
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, editUsernameFragment)
-//                .addToBackStack(null) // Tambahkan ke back stack agar bisa kembali ke ProfileFragment
-//                .commit()
-//        }
-
         return view
+    }
+
+    private fun formatInstantToYear(instant: Instant): String { //nampilin tahun aja
+        val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        return localDateTime.year.toString()
     }
 }
