@@ -5,6 +5,23 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Foto Profil -->
+    <ImageView
+        android:id="@+id/iv_profile"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/default_profile"
+        android:contentDescription="Foto Profil"
+        android:scaleType="centerCrop"/>
+
+    <!-- Tombol Upload -->
+    <Button
+        android:id="@+id/btn_upload_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ubah Foto Profil"
+        android:layout_marginTop="16dp"/>
+
     <TextView
         android:id="@+id/tv_username"
         android:layout_width="wrap_content"

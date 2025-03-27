@@ -10,4 +10,5 @@ data class User(
     val email: String,
     val xp: Int? = null, //jadi nullable
     val created_at: Instant?,
+    val user_photo_profile: String? = null
 )

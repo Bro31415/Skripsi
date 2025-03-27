@@ -77,4 +77,20 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation("androidx.preference:preference-ktx:1.2.1")
+
+    // Supabase Storage
+    implementation("io.github.jan-tennert.supabase:storage-kt")
+
+    // Image Picker
+    implementation ("com.github.dhaval2404:imagepicker:2.1")
+
+
+
+    // Image Loader (Glide)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+//    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+    // Permission Handling
+    implementation("com.guolindev.permissionx:permissionx:1.7.1")
+
 }
