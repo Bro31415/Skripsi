@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        app:title="Tampilan">
+
+        <androidx.preference.Preference
+            app:key="app_theme"
+            app:title="Tema Aplikasi"/>
+
+        <androidx.preference.Preference
+            app:key="font_size"
+            app:title="Ukuran Font"/>
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:title="Akun">
+
+        <androidx.preference.Preference
+            app:key="notifications"
+            app:title="Notifikasi"/>
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

@@ -13,8 +13,6 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.ktor.util.reflect.instanceOf
 import java.lang.reflect.Array.set
 
-
-
 class UserRepository {
 
 
@@ -65,6 +63,7 @@ class UserRepository {
 
                 val userId = currentUser?.id
                 val userEmail = currentUser?.email
+                val createdAt = currentUser?.createdAt
 
                 if (userId == null || userEmail == null) {
                     Log.e("UserProfile", "User not authenticated or missing information")
@@ -75,7 +74,8 @@ class UserRepository {
                     id = userId,
                     email = userEmail,
                     username = username,
-                    xp = 0
+                    xp = 0,
+                    created_at = createdAt
                 )
 
                 MyApp.supabase.postgrest.from("users").insert(createUser)
@@ -87,44 +87,14 @@ class UserRepository {
         }
     }
 
-    //tambahan wil (untuk ngambil user yg login) [19 mar 25]
-    suspend fun getUserProfile(userId: String): User? {
-        return withContext(Dispatchers.IO) {
-            try {
-                val user = MyApp.supabase.postgrest.from("users").select {
-                    filter {
-                        eq("id", userId)
-                    }
-                }.decodeSingleOrNull<User>()
-
-                // Tambahkan log untuk memeriksa data user
-                Log.d("UserProfile", "User data: $user")
-
-                user
-            } catch (e: Exception) {
-                Log.e("UserProfile", "Failed to fetch user profile: ${e.message}")
-                null
+    suspend fun sendPasswordResetEmail(email: String): Result<Unit> {
+        return try {
+            withContext(Dispatchers.IO) {
+                MyApp.supabase.auth.resetPasswordForEmail(email)
+                Result.success(Unit)
             }
-        }
-    }
-
-    // update username
-    suspend fun updateUsername(userId: String, newUsername: String): Boolean {
-        return withContext(Dispatchers.IO) {
-            try {
-                // Update username di tabel users
-                MyApp.supabase.postgrest.from("users").update({
-                    set("username", newUsername)
-                }) {
-                    filter {
-                        eq("id", userId)
-                    }
-                }
-                true
-            } catch (e: Exception) {
-                Log.e("UserProfile", "Failed to update username: ${e.message}")
-                false
-            }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }
