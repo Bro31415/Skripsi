@@ -1,60 +1,80 @@
 package com.example.skripsi.ui.leaderboard
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.skripsi.R
+import com.example.skripsi.data.model.User
+import com.example.skripsi.data.repository.UserRepository
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class LeaderboardActivity : AppCompatActivity() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [LeaderboardFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class LeaderboardFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    // User repository (you'll need to inject or create this based on your app architecture)
+    private lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        setContentView(R.layout.fragment_leaderboard)
+
+        // Initialize user repository
+        userRepository = UserRepository()
+
+        // Load leaderboard data
+        loadLeaderboardData()
+    }
+
+    private fun loadLeaderboardData() {
+        lifecycleScope.launch {
+            try {
+                // Fetch all users from the database
+                val allUsers = userRepository.getAllUsers()
+
+                // Sort users by XP in descending order
+                val sortedUsers = allUsers.sortedByDescending { it.xp }
+
+                // Update UI with sorted users
+                displayLeaderboard(sortedUsers)
+            } catch (e: Exception) {
+                // Handle any errors that might occur during data fetching
+                e.printStackTrace()
+                // Show error message to the user or implement retry logic
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leaderboard, container, false)
-    }
+    private fun displayLeaderboard(users: List<User>) {
+        // Make sure we have users to display
+        if (users.isEmpty()) return
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LeaderboardFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LeaderboardFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        // Get references to TextViews for the main leaderboard (top 4 players)
+        val playerNames = arrayOf(
+            findViewById<TextView>(R.id.player_name1),
+            findViewById<TextView>(R.id.player_name2),
+            findViewById<TextView>(R.id.player_name3),
+            findViewById<TextView>(R.id.player_name4)
+        )
+
+        val playerXPs = arrayOf(
+            findViewById<TextView>(R.id.player_xp1),
+            findViewById<TextView>(R.id.player_xp2),
+            findViewById<TextView>(R.id.player_xp3),
+            findViewById<TextView>(R.id.player_xp4)
+        )
+
+        // Fill in the top 4 players
+        for (i in 0 until minOf(4, users.size)) {
+            playerNames[i].text = users[i].username
+            playerXPs[i].text = "${users[i].xp} XP"
+        }
+
+        // Get relegation zone player (5th player or last if less than 5)
+        val relegationIndex = if (users.size > 4) 4 else users.size - 1
+        if (relegationIndex >= 0 && relegationIndex < users.size) {
+            findViewById<TextView>(R.id.relegation_player_name).text = users[relegationIndex].username
+            findViewById<TextView>(R.id.relegation_player_xp).text = "${users[relegationIndex].xp} XP"
+        }
     }
 }
+
