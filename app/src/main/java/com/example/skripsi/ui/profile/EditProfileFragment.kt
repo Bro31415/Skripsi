@@ -47,15 +47,15 @@ class EditUsernameFragment : Fragment() {
             }
 
             // Panggil fungsi untuk mengupdate username
-            authViewModel.updateUsername(newUsername) { success ->
-                if (success) {
-                    Toast.makeText(requireContext(), "Username updated successfully", Toast.LENGTH_SHORT).show()
-                    // Update EditText dengan username baru
-                    etNewUsername.setText(newUsername)
-                } else {
-                    Toast.makeText(requireContext(), "Failed to update username", Toast.LENGTH_SHORT).show()
-                }
-            }
+//            authViewModel.updateUsername(newUsername) { success ->
+//                if (success) {
+//                    Toast.makeText(requireContext(), "Username updated successfully", Toast.LENGTH_SHORT).show()
+//                    // Update EditText dengan username baru
+//                    etNewUsername.setText(newUsername)
+//                } else {
+//                    Toast.makeText(requireContext(), "Failed to update username", Toast.LENGTH_SHORT).show()
+//                }
+//            }
         }
 
         // Tombol untuk kembali ke ProfileFragment

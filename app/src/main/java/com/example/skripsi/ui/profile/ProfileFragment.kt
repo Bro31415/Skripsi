@@ -36,26 +36,26 @@ class ProfileFragment : Fragment() {
 
         if (userId != null) {
             Log.d("ProfileFragment", "User ID: $userId") // Periksa userId
-            authViewModel.getUserProfile(userId) { user ->
-                if (user != null) {
-                    Log.d("ProfileFragment", "User data retrieved: ${user.username}") // Periksa username
-                    view.findViewById<TextView>(R.id.tv_username).text = user.username
-                    // Tombol untuk mengarahkan ke EditUsernameFragment
-                    view.findViewById<Button>(R.id.btn_edit_username).setOnClickListener {
-                        val editUsernameFragment = EditUsernameFragment().apply {
-                            arguments = Bundle().apply {
-                                putString("oldUsername", user.username) // Kirim username lama ke EditUsernameFragment
-                            }
-                        }
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, editUsernameFragment)
-                            .addToBackStack(null) // Tambahkan ke back stack agar bisa kembali ke ProfileFragment
-                            .commit()
-                    }
-                } else {
-                    Log.e("ProfileFragment", "User not found")
-                }
-            }
+//            authViewModel.getUserProfile(userId) { user ->
+//                if (user != null) {
+//                    Log.d("ProfileFragment", "User data retrieved: ${user.username}") // Periksa username
+//                    view.findViewById<TextView>(R.id.tv_username).text = user.username
+//                    // Tombol untuk mengarahkan ke EditUsernameFragment
+//                    view.findViewById<Button>(R.id.btn_edit_username).setOnClickListener {
+//                        val editUsernameFragment = EditUsernameFragment().apply {
+//                            arguments = Bundle().apply {
+//                                putString("oldUsername", user.username) // Kirim username lama ke EditUsernameFragment
+//                            }
+//                        }
+//                        parentFragmentManager.beginTransaction()
+//                            .replace(R.id.fragment_container, editUsernameFragment)
+//                            .addToBackStack(null) // Tambahkan ke back stack agar bisa kembali ke ProfileFragment
+//                            .commit()
+//                    }
+//                } else {
+//                    Log.e("ProfileFragment", "User not found")
+//                }
+//            }
         } else {
             Log.e("ProfileFragment", "User not authenticated")
         }

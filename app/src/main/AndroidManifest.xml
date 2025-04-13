@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Skripsi"
         tools:targetApi="31">
         <activity
+            android:name=".ui.course.QuizActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.auth.ForgotPasswordActivity"
             android:exported="false" />
         <activity
