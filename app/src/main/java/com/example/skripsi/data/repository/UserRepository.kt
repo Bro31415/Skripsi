@@ -97,4 +97,47 @@ class UserRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun getAllUsers(): List<User> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val users = MyApp.supabase
+                    .postgrest
+                    .from("users")
+                    .select()
+                    .decodeList<User>()
+
+                Log.d("UserRepository", "Successfully fetched ${users.size} users")
+                users
+            } catch (e: Exception) {
+                Log.e("UserRepository", "Failed to fetch users: ${e.message}", e)
+                // Return empty list in case of error
+                emptyList()
+            }
+        }
+    }
+
+//    suspend fun getUserRank(id: String): Int {
+//        return withContext(Dispatchers.IO) {
+//            try {
+//                val allUsers = getAllUsers()
+//                val sortedUsers = allUsers.sortedByDescending { it.xp }
+//
+//                // Find the index of the user and add 1 to get 1-based rank
+//                val rank = sortedUsers.indexOfFirst { it.id == id } + 1
+//
+//                if (rank > 0) {
+//                    Log.d("UserRepository", "User $id has rank $rank")
+//                    rank
+//                } else {
+//                    Log.e("UserRepository", "User $id not found in leaderboard")
+//                    -1
+//                }
+//            } catch (e: Exception) {
+//                Log.e("UserRepository", "Error getting user rank: ${e.message}", e)
+//                -1
+//            }
+//        }
+//    }
+
 }
