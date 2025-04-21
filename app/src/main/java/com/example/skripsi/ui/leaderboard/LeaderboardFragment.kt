@@ -1,25 +1,64 @@
 package com.example.skripsi.ui.leaderboard
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.skripsi.R
 import com.example.skripsi.data.model.User
 import com.example.skripsi.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class LeaderboardActivity : AppCompatActivity() {
+class LeaderboardFragment : Fragment() {
 
     // User repository (you'll need to inject or create this based on your app architecture)
     private lateinit var userRepository: UserRepository
 
+    // View references
+    private lateinit var playerNames: Array<TextView>
+    private lateinit var playerXPs: Array<TextView>
+    private lateinit var relegationPlayerName: TextView
+    private lateinit var relegationPlayerXP: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_leaderboard)
 
         // Initialize user repository
         userRepository = UserRepository()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the fragment layout
+        return inflater.inflate(R.layout.fragment_leaderboard, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Initialize view references
+        playerNames = arrayOf(
+            view.findViewById(R.id.player_name1),
+            view.findViewById(R.id.player_name2),
+            view.findViewById(R.id.player_name3),
+            view.findViewById(R.id.player_name4)
+        )
+
+        playerXPs = arrayOf(
+            view.findViewById(R.id.player_xp1),
+            view.findViewById(R.id.player_xp2),
+            view.findViewById(R.id.player_xp3),
+            view.findViewById(R.id.player_xp4)
+        )
+
+        relegationPlayerName = view.findViewById(R.id.relegation_player_name)
+        relegationPlayerXP = view.findViewById(R.id.relegation_player_xp)
 
         // Load leaderboard data
         loadLeaderboardData()
@@ -48,21 +87,6 @@ class LeaderboardActivity : AppCompatActivity() {
         // Make sure we have users to display
         if (users.isEmpty()) return
 
-        // Get references to TextViews for the main leaderboard (top 4 players)
-        val playerNames = arrayOf(
-            findViewById<TextView>(R.id.player_name1),
-            findViewById<TextView>(R.id.player_name2),
-            findViewById<TextView>(R.id.player_name3),
-            findViewById<TextView>(R.id.player_name4)
-        )
-
-        val playerXPs = arrayOf(
-            findViewById<TextView>(R.id.player_xp1),
-            findViewById<TextView>(R.id.player_xp2),
-            findViewById<TextView>(R.id.player_xp3),
-            findViewById<TextView>(R.id.player_xp4)
-        )
-
         // Fill in the top 4 players
         for (i in 0 until minOf(4, users.size)) {
             playerNames[i].text = users[i].username
@@ -72,9 +96,8 @@ class LeaderboardActivity : AppCompatActivity() {
         // Get relegation zone player (5th player or last if less than 5)
         val relegationIndex = if (users.size > 4) 4 else users.size - 1
         if (relegationIndex >= 0 && relegationIndex < users.size) {
-            findViewById<TextView>(R.id.relegation_player_name).text = users[relegationIndex].username
-            findViewById<TextView>(R.id.relegation_player_xp).text = "${users[relegationIndex].xp} XP"
+            relegationPlayerName.text = users[relegationIndex].username
+            relegationPlayerXP.text = "${users[relegationIndex].xp} XP"
         }
     }
 }
-
