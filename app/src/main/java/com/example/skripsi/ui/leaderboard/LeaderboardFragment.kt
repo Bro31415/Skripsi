@@ -1,6 +1,7 @@
 package com.example.skripsi.ui.leaderboard
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,20 +66,35 @@ class LeaderboardFragment : Fragment() {
     }
 
     private fun loadLeaderboardData() {
+        // Add initial log message
+        Log.d("LeaderboardFragment", "Starting to load leaderboard data")
+
         lifecycleScope.launch {
             try {
                 // Fetch all users from the database
+                Log.d("LeaderboardFragment", "Attempting to fetch users")
                 val allUsers = userRepository.getAllUsers()
+
+                // Log the result
+                Log.d("LeaderboardFragment", "Fetched ${allUsers.size} users")
+                if (allUsers.isEmpty()) {
+                    Log.d("LeaderboardFragment", "No users found in database")
+                    // Display some UI indication that no data is available
+                    playerNames[0].text = "No users found"
+                    return@launch
+                }
 
                 // Sort users by XP in descending order
                 val sortedUsers = allUsers.sortedByDescending { it.xp }
+                Log.d("LeaderboardFragment", "Sorted users, top user: ${sortedUsers.firstOrNull()?.username}")
 
                 // Update UI with sorted users
                 displayLeaderboard(sortedUsers)
+                Log.d("LeaderboardFragment", "Displayed leaderboard data")
             } catch (e: Exception) {
-                // Handle any errors that might occur during data fetching
-                e.printStackTrace()
-                // Show error message to the user or implement retry logic
+                Log.e("LeaderboardFragment", "Error loading leaderboard data", e)
+                // Display error message in UI
+                playerNames[0].text = "Error loading data"
             }
         }
     }

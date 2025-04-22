@@ -8,11 +8,15 @@
 
         <androidx.preference.Preference
             app:key="app_theme"
-            app:title="Tema Aplikasi"/>
+            app:title="Tema Aplikasi"
+            app:icon="@drawable/ic_theme"
+            app:summary="Pilih tema aplikasi"/>
 
         <androidx.preference.Preference
             app:key="font_size"
-            app:title="Ukuran Font"/>
+            app:title="Ukuran Font"
+            app:icon="@drawable/ic_font"
+            app:summary="Atur ukuran font aplikasi"/>
 
     </androidx.preference.PreferenceCategory>
 
@@ -21,7 +25,27 @@
 
         <androidx.preference.Preference
             app:key="notifications"
-            app:title="Notifikasi"/>
+            app:title="Notifikasi"
+            app:icon="@drawable/ic_notification"
+            app:summary="Atur preferensi notifikasi"/>
+
+        <androidx.preference.Preference
+            app:key="change_password"
+            app:title="Ganti Password"
+            app:icon="@drawable/ic_password"
+            app:summary="Ubah password akun Anda"/>
+
+        <androidx.preference.Preference
+            app:key="reset_progress"
+            app:title="Reset Progress"
+            app:icon="@drawable/ic_reset"
+            app:summary="Kembalikan progress ke awal"/>
+
+        <androidx.preference.Preference
+            app:key="logout"
+            app:title="Keluar dari Aplikasi"
+            app:icon="@drawable/ic_logout"
+            app:summary="Keluar dari akun Anda"/>
 
     </androidx.preference.PreferenceCategory>
 
