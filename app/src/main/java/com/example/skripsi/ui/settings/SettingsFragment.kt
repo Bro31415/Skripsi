@@ -15,7 +15,7 @@ class SettingsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
-       // val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_settings)
+//        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_settings)
 //        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 //
 //        val settingsList = listOf(
@@ -56,7 +56,7 @@ data class SettingsItem(val title: String, val iconRes: Int)
 //        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_setting, parent, false)
 //        return SettingsViewHolder(view)
 //    }
-
+//
 //    override fun onBindViewHolder(holder: SettingsViewHolder, position: Int) {
 //        holder.bind(items[position])
 //    }
