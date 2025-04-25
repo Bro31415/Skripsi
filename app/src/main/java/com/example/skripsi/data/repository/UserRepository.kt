@@ -97,4 +97,24 @@ class UserRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun getAllUsers(): List<User> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val users = MyApp.supabase
+                    .postgrest
+                    .from("users")
+                    .select()
+                    .decodeList<User>()
+
+                Log.d("UserRepository", "Successfully fetched ${users.size} users")
+                users
+            } catch (e: Exception) {
+                Log.e("UserRepository", "Failed to fetch users: ${e.message}", e)
+                // Return empty list in case of error
+                emptyList()
+            }
+        }
+    }
+
 }

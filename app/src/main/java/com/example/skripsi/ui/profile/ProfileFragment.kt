@@ -35,7 +35,7 @@ class ProfileFragment : Fragment() {
         val userId = currentUser?.id
 
         if (userId != null) {
-            Log.d("ProfileFragment", "User ID: $userId") // Periksa userId
+//            Log.d("ProfileFragment", "User ID: $userId") // Periksa userId
 //            authViewModel.getUserProfile(userId) { user ->
 //                if (user != null) {
 //                    Log.d("ProfileFragment", "User data retrieved: ${user.username}") // Periksa username

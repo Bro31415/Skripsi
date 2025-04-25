@@ -22,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
         val bottomNavBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         if(savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CourseFragment()).commit()
+             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CourseFragment()).commit()
         }
 
         bottomNavBar.setOnItemSelectedListener { item ->
