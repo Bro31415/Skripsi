@@ -23,6 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import androidx.activity.result.contract.ActivityResultContracts
 import android.net.Uri
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -41,14 +42,6 @@ class ProfileFragment : Fragment() {
     private lateinit var authViewModel: AuthViewModel
     private lateinit var profileImageView: ImageView
 
-    // Untuk memilih gambar dari gallery
-    private val pickImageLauncher = registerForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let { uploadImageToSupabase(it) }
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,79 +56,9 @@ class ProfileFragment : Fragment() {
 
         if (userId != null) {
             loadUserProfile(userId, view)
-
-            // Tombol upload foto
-            view.findViewById<Button>(R.id.btn_upload_photo).setOnClickListener {
-                pickImageLauncher.launch("image/*")
-            }
         }
 
         return view
-    }
-
-    private fun uploadImageToSupabase(imageUri: Uri) {
-        lifecycleScope.launch {
-            try {
-                val userId = MyApp.supabase.auth.currentUserOrNull()?.id ?: return@launch
-
-                // 1. Baca file dari URI
-                val inputStream = requireContext().contentResolver.openInputStream(imageUri)
-                val bytes = inputStream?.readBytes() ?: throw Exception("Gagal membaca gambar")
-
-                // 2. Generate nama file unik
-                val fileName = "$userId/${UUID.randomUUID()}.jpg"
-
-                // 3. Upload ke Supabase Storage
-                MyApp.supabase.storage
-                    .from("profile-picture")
-                    .upload(
-                        path = fileName,
-                        data = bytes,
-                        options = {
-                            // Opsional: tambahkan konfigurasi upload di sini
-                            contentType = ContentType.Image.JPEG
-                            upsert = true
-                        }
-                    )
-
-
-                // 4. Dapatkan URL publik
-                val publicUrl = MyApp.supabase.storage
-                    .from("profile-picture")
-                    .publicUrl(fileName)
-
-
-                // 5. Update URL di database user
-                MyApp.supabase.postgrest
-                    .from("users")
-                    .update({
-                        set("user_photo_profile", publicUrl)
-                    }) {
-                        filter{
-                            eq("id", userId)
-                        }
-                    }
-
-
-                // 6. Tampilkan gambar baru
-                Log.d("ProfileFragment", "Image uploaded at: $publicUrl")
-                val requestOptions = RequestOptions()
-                    .timeout(10000) // 10 detik timeout
-                Glide.with(this@ProfileFragment)
-                    .load(publicUrl)
-                    .apply(requestOptions)
-                    .skipMemoryCache(true) // Abaikan cache di memori
-                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Abaikan cache di disk
-                    .circleCrop()
-                    .into(profileImageView)
-
-
-                Toast.makeText(context, "Foto profil berhasil diupdate!", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                Log.e("ProfileFragment", "Upload error", e)
-            }
-        }
     }
 
     private fun loadUserProfile(userId: String, view: View) {
@@ -144,6 +67,10 @@ class ProfileFragment : Fragment() {
             if (user != null) {
                 // Tampilkan username
                 view.findViewById<TextView>(R.id.tv_username).text = user.username
+
+                //Tampilkan XP
+                val xpText = "XP: ${user.xp ?: 0}" // Jika xp null, tampilkan 0
+                view.findViewById<TextView>(R.id.tv_xp).text = xpText
 
                 // Tampilkan tahun join
                 user.created_at?.let { instant ->
@@ -161,14 +88,15 @@ class ProfileFragment : Fragment() {
                 }
 
                 // Tombol edit username
-                view.findViewById<Button>(R.id.btn_edit_username).setOnClickListener {
-                    val editUsernameFragment = EditUsernameFragment().apply {
+                view.findViewById<ImageButton>(R.id.btn_edit_profile).setOnClickListener {
+                    val editProfileFragment = EditProfileFragment().apply {
                         arguments = Bundle().apply {
                             putString("oldUsername", user.username)
+                            putString("profilePhotoUrl", user.user_photo_profile)
                         }
                     }
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, editUsernameFragment)
+                        .replace(R.id.fragment_container, editProfileFragment)
                         .addToBackStack(null)
                         .commit()
                 }
