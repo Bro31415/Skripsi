@@ -6,18 +6,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class MatchViewModel : ViewModel() {
-    // Fixed word list to form the sentence: "kumaha damang?"
+
     private val _wordList = listOf("kumaha", "damang", "?")
     val wordList: List<String> get() = _wordList
 
-    // Holds the currently selected words
+
     var selectedWords by mutableStateOf(listOf<String>())
         private set
 
-    // The correct sentence to validate against
     val correctSentence = "kumaha damang?"
 
-    // Holds the validation result
     var isAnswerCorrect by mutableStateOf<Boolean?>(null)
         private set
 
