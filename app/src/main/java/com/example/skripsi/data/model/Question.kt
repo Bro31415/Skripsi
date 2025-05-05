@@ -6,10 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Question(
-    val id: String,
-    val type: QuestionType,
-    val question: String,
-    val options: List<String>? = null,
-    @SerialName("correct_answer") val correctAnswer: String,
-    @SerialName("words_to_order") val wordsToOrder: List<String>? = null
+    val id: Long,
+    val quizId: Long,
+    val questionText: String,
+    val questionType: String,
+    val answer: String,
+    val xp: Short?,
+    val createdAt: String
 )

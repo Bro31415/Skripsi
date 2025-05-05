@@ -7,14 +7,14 @@ import androidx.lifecycle.ViewModel
 
 class MatchViewModel : ViewModel() {
 
-    private val _wordList = listOf("kumaha", "damang", "?")
+    private val _wordList = listOf("kumaha", "damang", "?") // ambil dari db
     val wordList: List<String> get() = _wordList
 
 
     var selectedWords by mutableStateOf(listOf<String>())
         private set
 
-    val correctSentence = "kumaha damang?"
+    val correctSentence = "kumaha damang?" // ambil dari db
 
     var isAnswerCorrect by mutableStateOf<Boolean?>(null)
         private set
