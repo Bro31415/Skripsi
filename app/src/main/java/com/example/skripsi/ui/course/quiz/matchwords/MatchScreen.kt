@@ -17,7 +17,6 @@ import com.example.skripsi.viewmodel.MatchViewModel
 fun MatchScreen(viewModel: MatchViewModel = viewModel()) {
     val wordList = viewModel.wordList
     val selectedWords = viewModel.selectedWords
-    val correctSentence = viewModel.correctSentence
     val isAnswerCorrect = viewModel.isAnswerCorrect
 
     Column(

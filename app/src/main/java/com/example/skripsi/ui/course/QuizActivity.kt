@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.skripsi.R
+import kotlin.reflect.jvm.internal.impl.incremental.components.Position
 
 class QuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,20 +23,17 @@ class QuizActivity : AppCompatActivity() {
 //            insets
 //        }
 
-        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        viewPager.adapter = QuizAdapter(this)
+        showQuestion(0) // Hardcoded
     }
-}
 
-class QuizAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
-    override fun getItemCount(): Int = 3 // ini hardcoded sementara untuk testing fragments--nanti diset untuk di databasenya gimana
-
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> MultipleChoiceFragment()
+    private fun showQuestion(position: Int) {
+        val fragment = when (position) {
+            0 -> MatchFragment()
             1 -> FillInTheBlankFragment()
-            2 -> MatchFragment()
-            else -> throw IllegalStateException()
+            2 -> MultipleChoiceFragment()
+            else -> throw IllegalStateException("Invalid Position")
         }
+
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,fragment).commit()
     }
 }
