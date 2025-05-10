@@ -37,4 +37,16 @@ class QuizRepository {
             }.decodeList<Question>()
         return question
     }
+
+    suspend fun getQuizTypesChapter(
+        chapterId: Long
+    ): List<String> {
+        val quizTypes = supabase.from("quiz")
+            .select(columns = Columns.list("quiz_type")) {
+                filter {
+                    eq("chapter_id", chapterId)
+                }
+            }.decodeList<Quiz>()
+        return quizTypes.map {it.quizType}.distinct()
+    }
 }
