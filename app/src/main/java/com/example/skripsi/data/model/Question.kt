@@ -14,6 +14,7 @@ data class Question(
     val questionText: String,
     val questionType: String,
     val answer: String,
+    val options: List<String>,
     val xp: Short?,
-    val createdAt: String
+    val createdAt: String? = null
 ) : Parcelable

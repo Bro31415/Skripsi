@@ -51,7 +51,12 @@ class QuizRunnerActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.commit {
-            replace(R.id.qu)
+            replace(R.id.quizFragmentContainer, fragment)
         }
+    }
+
+    fun continueQuestion() {
+        currentQuestionIndex++
+        showQuestion(currentQuestionIndex)
     }
 }

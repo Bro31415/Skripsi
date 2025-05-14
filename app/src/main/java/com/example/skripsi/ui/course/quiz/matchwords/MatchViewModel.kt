@@ -4,17 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.skripsi.data.model.Question
 
-class MatchViewModel : ViewModel() {
+class MatchViewModel(private val question: Question) : ViewModel() {
 
-    private val _wordList = listOf("kumaha", "damang", "?") // ambil dari db
+    private val _wordList = question.options
     val wordList: List<String> get() = _wordList
-
 
     var selectedWords by mutableStateOf(listOf<String>())
         private set
 
-    val correctSentence = "kumaha damang?" // ambil dari db
+    private val correctSentence = question.answer
 
     var isAnswerCorrect by mutableStateOf<Boolean?>(null)
         private set
