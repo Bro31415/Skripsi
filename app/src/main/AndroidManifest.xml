@@ -20,9 +20,6 @@
             android:name=".ui.course.QuizRunnerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.course.QuizActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.auth.ForgotPasswordActivity"
             android:exported="false" />
         <activity

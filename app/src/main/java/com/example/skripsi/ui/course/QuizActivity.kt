@@ -20,8 +20,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.skripsi.R
 import com.example.skripsi.data.repository.QuizRepository
-import com.example.skripsi.viewmodel.QuizViewModel
-import com.example.skripsi.viewmodel.factory.QuizViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.reflect.jvm.internal.impl.incremental.components.Position
 

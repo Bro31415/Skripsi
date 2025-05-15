@@ -10,11 +10,15 @@ import kotlinx.serialization.Serializable
 @Parcelize
 data class Question(
     val id: Long,
+    @SerialName("quiz_id")
     val quizId: Long,
+    @SerialName("question_text")
     val questionText: String,
+    @SerialName("question_type")
     val questionType: String,
     val answer: String,
-    val options: List<String>,
+    val options: List<String>? = emptyList(),
     val xp: Short?,
+    @SerialName("created_at")
     val createdAt: String? = null
 ) : Parcelable

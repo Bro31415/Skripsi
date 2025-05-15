@@ -8,12 +8,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.lifecycle.lifecycleScope
+import com.example.skripsi.MyApp
 import com.example.skripsi.R
 import com.example.skripsi.data.model.Question
+import com.example.skripsi.data.repository.CourseRepository
+import kotlinx.coroutines.launch
 
 class QuizRunnerActivity : AppCompatActivity() {
 
-    private lateinit var questions: List<Question>
+    private var questions: List<Question> = emptyList()
     private var currentQuestionIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,15 +25,26 @@ class QuizRunnerActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_quiz_runner)
 
-        questions = intent.getParcelableArrayListExtra("questions") ?: emptyList()
-
-        if (questions.isEmpty()) {
-            Log.e("QuizRunnerActivity", "No questions received from quiz activity")
+        val quizId = intent.getLongExtra("quizId", -1L)
+        if (quizId == -1L) {
+            Log.e("QuizRunnerActivity", "No quizId received")
             finish()
             return
         }
 
-        showQuestion(currentQuestionIndex)
+        lifecycleScope.launch {
+            // Assuming you have a repository to fetch questions by quizId
+            val repo = CourseRepository(MyApp.supabase)
+            questions = repo.getQuestionsByQuizId(quizId)
+
+            if (questions.isEmpty()) {
+                Log.e("QuizRunnerActivity", "No questions found for quizId $quizId")
+                finish()
+                return@launch
+            }
+
+            showQuestion(currentQuestionIndex)
+        }
     }
 
     private fun showQuestion(index: Int){
@@ -42,8 +57,8 @@ class QuizRunnerActivity : AppCompatActivity() {
         val question = questions[index]
         val fragment = when (question.questionType) {
             "match" -> MatchFragment.newInstance(question)
-            "fill_in_the_blank" -> FillInTheBlankFragment() // TODO: Add newInstance() inside fragment
-            "multiple_choice" -> MultipleChoiceFragment() // TODO: Add newInstance() inside fragment
+            "fill_in_the_blank" -> FillInTheBlankFragment() // TODO: add newInstance() method here
+            "multiple_choice" -> MultipleChoiceFragment() // TODO: add newInstance() method here
             else -> {
                 Log.e("QuizRunnerActivity", "Unknown question type: ${question.questionType}")
                 return

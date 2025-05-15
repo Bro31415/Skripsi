@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.skripsi.MyApp
 import com.example.skripsi.data.model.ChapterWithQuizzes
+import com.example.skripsi.data.model.Question
 import com.example.skripsi.data.repository.CourseRepository
 import com.example.skripsi.viewmodel.CourseViewModel
 import com.example.skripsi.viewmodel.factory.CourseViewModelFactory
@@ -36,6 +37,7 @@ private const val ARG_PARAM2 = "param2"
 
 class CourseFragment : Fragment() {
 
+    private var questions: List<Question>? = null
     private val viewModel: CourseViewModel by viewModels()
 
     override fun onCreateView(
@@ -56,7 +58,9 @@ class CourseFragment : Fragment() {
                     CourseScreen(
                         chapters = chapters,
                         onQuizClick = { quizId ->
+                            val safeQuestions = questions ?: emptyList()
                             val intent = Intent(requireContext(), QuizRunnerActivity::class.java)
+                            intent.putParcelableArrayListExtra("questions", ArrayList(safeQuestions))
                             intent.putExtra("quizId", quizId)
                             startActivity(intent)
                         }
@@ -64,8 +68,6 @@ class CourseFragment : Fragment() {
                 }
             }
         }
-
-
     }
 
     @Composable
