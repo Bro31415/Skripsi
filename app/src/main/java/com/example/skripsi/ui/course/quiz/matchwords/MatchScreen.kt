@@ -41,14 +41,16 @@ fun MatchScreen(viewModel: MatchViewModel = viewModel()) {
         }
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(wordList.filterNot { selectedWords.contains(it) }) { word ->
-                Text(
-                    text = word,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .clickable { viewModel.selectWord(word) }
-                        .padding(8.dp)
-                )
+            if (wordList != null) {
+                items(wordList.filterNot { selectedWords.contains(it) }) { word ->
+                    Text(
+                        text = word,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier
+                            .clickable { viewModel.selectWord(word) }
+                            .padding(8.dp)
+                    )
+                }
             }
         }
 
