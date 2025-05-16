@@ -9,21 +9,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.example.skripsi.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CourseFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CourseFragment : Fragment() {
+    private val quizId = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.findViewById<Button>(R.id.btnTest).setOnClickListener{
-            startActivity(Intent(requireActivity(), QuizActivity::class.java))
+        super.onViewCreated(view, savedInstanceState)
+
+        view.findViewById<Button>(R.id.btnTest).setOnClickListener {
+            Intent(requireContext(), QuizActivity::class.java).also { intent ->
+                intent.putExtra("quizId", quizId)
+                startActivity(intent)
+            }
         }
     }
 

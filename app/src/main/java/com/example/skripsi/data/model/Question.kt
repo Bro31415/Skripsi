@@ -1,15 +1,34 @@
 package com.example.skripsi.data.model
 
-import io.github.jan.supabase.postgrest.query.Order
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Parcelize
 data class Question(
-    val id: String,
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("quiz_id")
+    val quizId: Int,
+
+    @SerialName("question_text")
+    val text: String,
+
+    @SerialName("question_type")
     val type: QuestionType,
-    val question: String,
-    val options: List<String>? = null,
-    @SerialName("correct_answer") val correctAnswer: String,
-    @SerialName("words_to_order") val wordsToOrder: List<String>? = null
-)
+
+    @SerialName("options")
+    val options: List<String>,
+
+    @SerialName("answer")
+    val correctAnswer: String,
+
+    @SerialName("xp")
+    val xp: Int,
+
+    @SerialName("created_at")
+    val createdAt: String
+) : Parcelable

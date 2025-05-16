@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -100,5 +101,11 @@ dependencies {
 
     // Permission Handling
     implementation("com.guolindev.permissionx:permissionx:1.7.1")
+
+    // Navigation Component
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0")
 
 }
