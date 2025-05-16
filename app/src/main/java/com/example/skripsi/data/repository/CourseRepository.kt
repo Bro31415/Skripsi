@@ -15,13 +15,20 @@ class CourseRepository (private val supabase: SupabaseClient) {
     suspend fun getChaptersWithQuizzes(): List<ChapterWithQuizzes> {
         return try {
             val chapters = supabase.from("chapter")
-                .select(columns = Columns.list("id", "name", "created_at"))
+                .select(columns = Columns.list(
+                    "id",
+                    "name",
+                    "created_at"))
                 .decodeList<Chapter>().also {
                     Log.d("CourseRepo", "Chapters loaded: ${it.size}")
                 }
 
             val quizzes = supabase.from("quiz")
-                .select(columns = Columns.list("id", "chapter_id", "quiz_type", "created_at"))
+                .select(columns = Columns.list(
+                    "id",
+                    "chapter_id",
+                    "quiz_type",
+                    "created_at"))
                 .decodeList<Quiz>().also {
                     Log.d("CourseRepo", "Quizzes loaded: ${it.size}")
                 }

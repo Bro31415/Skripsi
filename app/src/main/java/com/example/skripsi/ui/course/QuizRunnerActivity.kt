@@ -33,7 +33,6 @@ class QuizRunnerActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            // Assuming you have a repository to fetch questions by quizId
             val repo = CourseRepository(MyApp.supabase)
             questions = repo.getQuestionsByQuizId(quizId)
 
