@@ -1,59 +1,64 @@
-package com.example.skripsi.ui.course
+package com.example.skripsi.ui.course.quiz.multiplechoice
 
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.example.skripsi.R
+import androidx.annotation.RequiresApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
+import com.example.skripsi.data.model.Question
+import com.example.skripsi.ui.course.QuizRunnerActivity
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MultipleChoiceFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MultipleChoiceFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    companion object {
+        private const val ARG_QUESTION = "arg_question"
+        private const val ARG_SAVED_ANSWER = "arg_saved_answer"
+
+
+        fun newInstance(question: Question, savedAnswer: String?): MultipleChoiceFragment {
+            return MultipleChoiceFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_QUESTION, question)
+                    putString(ARG_SAVED_ANSWER, savedAnswer)
+                }
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_multiple_choice, container, false)
+    private val question: Question by lazy {
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable(ARG_QUESTION, Question::class.java)!!
+        } else {
+            requireArguments().getParcelable(ARG_QUESTION)!!
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MultipleChoiceFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MultipleChoiceFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private val savedAnswer: String? by lazy {
+        requireArguments().getString(ARG_SAVED_ANSWER)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MaterialTheme {
+                    MultipleChoiceScreen(
+                        question = question,
+                        savedAnswer = savedAnswer,
+                        onAnswerSelected = { selected ->
+                            (activity as? QuizRunnerActivity)?.onAnswerSelected(question.id, selected)
+                        }
+                    )
                 }
             }
+        }
     }
 }

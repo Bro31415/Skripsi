@@ -97,23 +97,44 @@ class UserRepository {
         }
     }
 
-    suspend fun getAllUsers(): List<User> {
+    //tambahan wil (untuk ngambil user yg login) [19 mar 25]
+    suspend fun getUserProfile(userId: String): User? {
         return withContext(Dispatchers.IO) {
             try {
-                val users = MyApp.supabase
-                    .postgrest
-                    .from("users")
-                    .select()
-                    .decodeList<User>()
+                val user = MyApp.supabase.postgrest.from("users").select {
+                    filter {
+                        eq("id", userId)
+                    }
+                }.decodeSingleOrNull<User>()
 
-                Log.d("UserRepository", "Successfully fetched ${users.size} users")
-                users
+                // Tambahkan log untuk memeriksa data user
+                Log.d("UserProfile", "User data: $user")
+
+                user
             } catch (e: Exception) {
-                Log.e("UserRepository", "Failed to fetch users: ${e.message}", e)
-                // Return empty list in case of error
-                emptyList()
+                Log.e("UserProfile", "Failed to fetch user profile: ${e.message}")
+                null
             }
         }
     }
 
+    // update username
+    suspend fun updateUsername(userId: String, newUsername: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                // Update username di tabel users
+                MyApp.supabase.postgrest.from("users").update({
+                    set("username", newUsername)
+                }) {
+                    filter {
+                        eq("id", userId)
+                    }
+                }
+                true
+            } catch (e: Exception) {
+                Log.e("UserProfile", "Failed to update username: ${e.message}")
+                false
+            }
+        }
+    }
 }

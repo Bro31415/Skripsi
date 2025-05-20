@@ -87,4 +87,26 @@ dependencies {
     implementation ("androidx.compose.ui:ui-tooling-preview:1.5.4")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
+    // Supabase Storage
+    implementation("io.github.jan-tennert.supabase:storage-kt")
+
+    // Image Picker
+    implementation ("com.github.dhaval2404:imagepicker:2.1")
+
+
+
+    // Image Loader (Glide)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+//    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+    // Permission Handling
+    implementation("com.guolindev.permissionx:permissionx:1.7.1")
+
+    // Navigation Component
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0")
+
 }
