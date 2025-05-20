@@ -1,24 +1,35 @@
-package com.example.skripsi.ui.quiz.multiplechoice
+package com.example.skripsi.ui.course.quiz.multiplechoice
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.skripsi.data.model.Question
-import com.example.skripsi.data.repository.QuestionRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
-class MultipleChoiceViewModel : ViewModel() {
+class MultipleChoiceViewModel(
+    private val question: Question,
+    private val initialAnswer: String?,
+    private val onAnswerSelected: (String) -> Unit
+) : ViewModel() {
 
-    private val repository = QuestionRepository()
+    // soal & opsi
+    val questionText: String = question.questionText
+    val options: List<String> = question.options.orEmpty()
+    private val correctAnswer: String = question.answer
 
-    private val _questions = MutableStateFlow<List<Question>>(emptyList())
-    val questions: StateFlow<List<Question>> = _questions
+    // state jawaban
+    var selectedAnswer by mutableStateOf<String?>(initialAnswer)
+        private set
 
-    fun loadQuestions(quizId: Int) {
-        viewModelScope.launch {
-            val result = repository.getMultipleChoiceQuestions(quizId)
-            _questions.value = result
+    var isAnswerCorrect by mutableStateOf<Boolean?>(initialAnswer?.let { it == correctAnswer })
+        private set
+
+    // dipanggil saat user pilih opsi
+    fun selectAnswer(answer: String) {
+        if (selectedAnswer == null) {
+            selectedAnswer = answer
+            isAnswerCorrect = answer == correctAnswer
+            onAnswerSelected(answer)
         }
     }
 }

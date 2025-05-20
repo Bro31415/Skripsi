@@ -1,7 +1,6 @@
 package com.example.skripsi.data.repository
 
 import android.util.Log
-import com.example.skripsi.MyApp.Companion.supabase
 import com.example.skripsi.data.model.Chapter
 import com.example.skripsi.data.model.ChapterWithQuizzes
 import com.example.skripsi.data.model.Question
