@@ -41,7 +41,6 @@ class QuizRunnerActivity : AppCompatActivity() {
                 finish()
                 return@launch
             }
-
             showQuestion(currentQuestionIndex)
         }
     }
