@@ -11,6 +11,7 @@ class MatchViewModel(private val question: Question) : ViewModel() {
 
     private val _wordList = question.options
     val wordList: List<String>? get() = _wordList
+    val questionText: String = question.questionText
 
     var selectedWords by mutableStateOf(listOf<String>())
         private set
