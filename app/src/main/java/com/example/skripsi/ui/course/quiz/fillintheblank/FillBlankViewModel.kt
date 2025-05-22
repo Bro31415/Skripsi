@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import com.example.skripsi.data.model.Question
 
-class FillBlankViewModel(val question: Question) : ViewModel() {
+class FillInTheBlankViewModel(val question: Question) : ViewModel() {
 
     var selectedAnswer by mutableStateOf<String?>(null)
         private set

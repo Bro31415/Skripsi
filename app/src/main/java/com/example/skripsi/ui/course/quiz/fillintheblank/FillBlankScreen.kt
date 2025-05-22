@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.skripsi.viewmodel.FillBlankViewModel
+import com.example.skripsi.viewmodel.FillInTheBlankViewModel
 
 @Composable
-fun FillBlankScreen(viewModel: FillBlankViewModel) {
+fun FillInTheBlankScreen(viewModel: FillInTheBlankViewModel) {
     val selectedAnswer = viewModel.selectedAnswer
     val isAnswerCorrect = viewModel.isAnswerCorrect
 

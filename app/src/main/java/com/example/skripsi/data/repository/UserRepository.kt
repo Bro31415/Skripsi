@@ -137,4 +137,16 @@ class UserRepository {
             }
         }
     }
+
+    suspend fun getAllUsers(): List<User> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val result = MyApp.supabase.postgrest.from("users").select().decodeList<User>()
+                result.filter { it.xp != null } // Filter user yang XP-nya null
+            } catch (e: Exception) {
+                Log.e("UserRepository", "Failed to fetch users: ${e.message}")
+                emptyList()
+            }
+        }
+    }
 }
