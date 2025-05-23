@@ -13,6 +13,7 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.ktor.util.reflect.instanceOf
 import java.lang.reflect.Array.set
 
+
 class UserRepository {
 
     suspend fun signUpUser(
@@ -138,13 +139,30 @@ class UserRepository {
         }
     }
 
-    suspend fun getAllUsers(): List<User> {
+//    suspend fun getAllUsers(): List<User> {
+//        return withContext(Dispatchers.IO) {
+//            try {
+//                val result = MyApp.supabase.postgrest.from("users").select().decodeList<User>()
+//                result.filter { it.xp != null } // Filter user yang XP-nya null
+//            } catch (e: Exception) {
+//                Log.e("UserRepository", "Failed to fetch users: ${e.message}")
+//                emptyList()
+//            }
+//        }
+//    }
+
+    suspend fun getTopUsers(limit: Int = 15): List<User> {
         return withContext(Dispatchers.IO) {
             try {
-                val result = MyApp.supabase.postgrest.from("users").select().decodeList<User>()
-                result.filter { it.xp != null } // Filter user yang XP-nya null
+                val users = MyApp.supabase.postgrest.from("users")
+                    .select()
+                    .decodeList<User>()
+
+                users.filter { user -> user.xp != null }
+                    .sortedByDescending { user -> user.xp }
+                    .take(limit)
             } catch (e: Exception) {
-                Log.e("UserRepository", "Failed to fetch users: ${e.message}")
+                Log.e("UserRepository", "Failed to get top users: ${e.message}")
                 emptyList()
             }
         }
