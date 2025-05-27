@@ -9,8 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.skripsi.ui.course.QuizRunnerActivity
 import com.example.skripsi.viewmodel.MatchViewModel
 
 @Composable
@@ -18,6 +20,17 @@ fun MatchScreen(viewModel: MatchViewModel = viewModel()) {
     val wordList = viewModel.wordList
     val selectedWords = viewModel.selectedWords
     val isAnswerCorrect = viewModel.isAnswerCorrect
+
+    val context = LocalContext.current
+    val activity = context as? QuizRunnerActivity
+
+    LaunchedEffect(isAnswerCorrect) {
+        if (isAnswerCorrect != null) {
+            kotlinx.coroutines.delay(3000) // 3 detik
+            activity?.continueQuestion()
+        }
+    }
+
 
     Column(
         modifier = Modifier

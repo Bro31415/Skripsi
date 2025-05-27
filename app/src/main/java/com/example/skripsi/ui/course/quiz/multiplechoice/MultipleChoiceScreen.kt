@@ -1,5 +1,6 @@
 package com.example.skripsi.ui.course.quiz.multiplechoice
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.*
@@ -11,6 +12,7 @@ import com.example.skripsi.data.model.Question
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
+import com.example.skripsi.ui.course.QuizRunnerActivity
 
 @Composable
 fun MultipleChoiceScreen(
@@ -36,6 +38,18 @@ fun MultipleChoiceContent(viewModel: MultipleChoiceViewModel) {
     val options = viewModel.options
     val selected = viewModel.selectedAnswer
     val isCorrect = viewModel.isAnswerCorrect
+
+    var showResult by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    val activity = context as? QuizRunnerActivity
+
+    LaunchedEffect(showResult) {
+        if (showResult) {
+            kotlinx.coroutines.delay(3000) // 3 detik
+            activity?.continueQuestion()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -67,8 +81,10 @@ fun MultipleChoiceContent(viewModel: MultipleChoiceViewModel) {
                         val bgColor = when {
                             isCorrect == true && selected == opt ->
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+
                             isCorrect == false && selected == opt ->
-                                MaterialTheme.colorScheme.error.copy(alpha = 0.3f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+
                             else -> MaterialTheme.colorScheme.surface
                         }
 
@@ -97,6 +113,45 @@ fun MultipleChoiceContent(viewModel: MultipleChoiceViewModel) {
         }
 
         Spacer(modifier = Modifier.height(32.dp))
+
+        if (!showResult) {
+            Button(
+                onClick = {
+                    if (selected != null) {
+                        showResult = true
+                    }
+                },
+                enabled = selected != null
+            ) {
+                Text("Submit")
+            }
+        } else {
+            val feedbackColor = if (isCorrect == true)
+                MaterialTheme.colorScheme.primaryContainer
+            else
+                MaterialTheme.colorScheme.errorContainer
+
+            val feedbackTextColor = if (isCorrect == true)
+                MaterialTheme.colorScheme.onPrimaryContainer
+            else
+                MaterialTheme.colorScheme.onErrorContainer
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .padding(16.dp)
+                    .background(color = feedbackColor, shape = MaterialTheme.shapes.medium),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (isCorrect == true) "Benar!" else "Salah!",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = feedbackTextColor
+                )
+            }
+        }
     }
 }
+
 

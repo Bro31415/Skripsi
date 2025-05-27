@@ -28,11 +28,11 @@ class QuizRunnerActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_quiz_runner)
 
-        btnNext = findViewById(R.id.btnNext)
-        btnPrevious = findViewById(R.id.btnPrevious)
-
-        btnNext.setOnClickListener { nextQuestion() }
-        btnPrevious.setOnClickListener { previousQuestion() }
+//        btnNext = findViewById(R.id.btnNext)
+//        btnPrevious = findViewById(R.id.btnPrevious)
+//
+//        btnNext.setOnClickListener { nextQuestion() }
+//        btnPrevious.setOnClickListener { previousQuestion() }
 
         val quizId = intent.getLongExtra("quizId", -1L)
         if (quizId == -1L) {
@@ -82,23 +82,23 @@ class QuizRunnerActivity : AppCompatActivity() {
         updateButtonState()
     }
 
-    private fun nextQuestion() {
-        if (currentQuestionIndex < questions.lastIndex) {
-            currentQuestionIndex++
-            showQuestion(currentQuestionIndex)
-        }
-    }
-
-    private fun previousQuestion() {
-        if (currentQuestionIndex > 0) {
-            currentQuestionIndex--
-            showQuestion(currentQuestionIndex)
-        }
-    }
+//    private fun nextQuestion() {
+//        if (currentQuestionIndex < questions.lastIndex) {
+//            currentQuestionIndex++
+//            showQuestion(currentQuestionIndex)
+//        }
+//    }
+//
+//    private fun previousQuestion() {
+//        if (currentQuestionIndex > 0) {
+//            currentQuestionIndex--
+//            showQuestion(currentQuestionIndex)
+//        }
+//    }
 
     private fun updateButtonState() {
-        btnPrevious.isEnabled = currentQuestionIndex > 0
-        btnNext.isEnabled = currentQuestionIndex < questions.lastIndex
+//        btnPrevious.isEnabled = currentQuestionIndex > 0
+//        btnNext.isEnabled = currentQuestionIndex < questions.lastIndex
     }
 
 
