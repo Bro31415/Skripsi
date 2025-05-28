@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -17,14 +18,21 @@ import com.example.skripsi.viewmodel.MatchViewModel
 
 
 @Composable
-fun MatchScreen(viewModel: MatchViewModel = viewModel()) {
+fun MatchScreen(
+    viewModel: MatchViewModel = viewModel(),
+    onResultValidated: (Boolean) -> Unit
+    ) {
     MatchScreenContent(
         questionText = viewModel.questionText,
         wordList = viewModel.wordList ?: emptyList(),
         selectedWords = viewModel.selectedWords,
         isAnswerCorrect = viewModel.isAnswerCorrect,
         onSelectWord = viewModel::selectWord,
-        onRemoveWord = viewModel::removeWord
+        onRemoveWord = viewModel::removeWord,
+        onSubmit = {
+            val isCorrect = viewModel.checkAnswer()
+            onResultValidated(isCorrect)
+        }
     )
 }
 
@@ -36,7 +44,8 @@ fun MatchScreenContent(
     selectedWords: List<String>,
     isAnswerCorrect: Boolean?,
     onSelectWord: (String) -> Unit,
-    onRemoveWord: (String) -> Unit
+    onRemoveWord: (String) -> Unit,
+    onSubmit: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -77,12 +86,13 @@ fun MatchScreenContent(
             }
         }
 
-        if (isAnswerCorrect != null) {
-            Text(
-                text = if (isAnswerCorrect) "Benar!" else "Jawaban anda salah.",
-                color = if (isAnswerCorrect) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyLarge
-            )
+        Button(
+            onClick = {
+                onSubmit()
+            },
+            enabled = selectedWords.isNotEmpty()
+        ) {
+            Text("Submit")
         }
     }
 
@@ -97,6 +107,7 @@ fun MatchScreenPreview() {
         selectedWords = listOf("test1", "test2"),
         isAnswerCorrect = false,
         onRemoveWord = {},
-        onSelectWord = {}
+        onSelectWord = {},
+        onSubmit = {}
     )
 }

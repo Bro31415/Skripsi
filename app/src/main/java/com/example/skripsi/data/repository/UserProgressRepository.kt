@@ -40,7 +40,7 @@ class UserProgressRepository {
                     }
                 }.decodeSingle<User>()
 
-            val newXp = currentXp.xp + xpToAdd
+            val newXp = currentXp.xp?.plus(xpToAdd)
 
             val updateXp = supabase.from("users")
                 .update(mapOf("xp" to newXp)) {

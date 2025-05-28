@@ -1,5 +1,6 @@
 package com.example.skripsi.ui.course
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,81 +17,108 @@ import com.example.skripsi.R
 import com.example.skripsi.data.model.Question
 import com.example.skripsi.data.repository.CourseRepository
 import com.example.skripsi.ui.course.quiz.multiplechoice.MultipleChoiceFragment
+import com.example.skripsi.ui.course.quiz.state.ErrorFragment
+import com.example.skripsi.ui.course.quiz.state.LoadingFragment
+import com.example.skripsi.viewmodel.QuizUiState
 import com.example.skripsi.viewmodel.QuizViewModel
 import com.example.skripsi.viewmodel.factory.QuizViewModelFactory
 import kotlinx.coroutines.launch
 
 class QuizRunnerActivity : AppCompatActivity() {
 
-    private lateinit var quizViewModel: QuizViewModel
-    private lateinit var quizId: String
-    private val answers = mutableMapOf<Long, String>()
+        private lateinit var quizViewModel: QuizViewModel
+        private lateinit var quizId: String
+        private val answers = mutableMapOf<Long, String>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_quiz_runner)
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            enableEdgeToEdge()
+            setContentView(R.layout.activity_quiz_runner)
 
-        val quizIdLong = intent.getLongExtra("quizId", -1L)
-        if (quizIdLong == -1L) {
-            Log.e("QuizRunnerActivity", "No quizId received")
-            finish()
-            return
-        }
-        quizId = quizIdLong.toString()
-
-        quizViewModel = ViewModelProvider(
-            this,
-            QuizViewModelFactory(quizId)
-        )[QuizViewModel::class.java]
-
-        lifecycleScope.launch {
-            val repo = CourseRepository(MyApp.supabase)
-            val questions = repo.getQuestionsByQuizId(quizIdLong)
-
-            if (questions.isEmpty()) {
-                Log.e("QuizRunnerActivity", "No questions found for quizId $quizId")
+            val quizIdLong = intent.getLongExtra("quizId", -1L)
+            if (quizIdLong == -1L) {
+                Log.e("QuizRunnerActivity", "No quizId received")
                 finish()
-                return@launch
-            }
-
-            quizViewModel.setQuestions(questions)
-            showQuestion()
-        }
-    }
-
-    private fun showQuestion() {
-        val question = quizViewModel.currentQuestion ?: run {
-            Log.i("QuizRunnerActivity", "Quiz Finished. XP Earned: ${quizViewModel.totalXpEarned}")
-            finish()
-            return
-        }
-
-        val savedAnswer = answers[question.id]
-
-        val fragment = when (question.questionType) {
-            "match" -> MatchFragment.newInstance(question)
-            "fill_in_the_blank" -> FillInTheBlankFragment() // TODO: add newInstance() method
-            "multiple_choice" -> MultipleChoiceFragment.newInstance(question, savedAnswer)
-            else -> {
-                Log.e("QuizRunnerActivity", "Unknown question type: ${question.questionType}")
                 return
             }
+            quizId = quizIdLong.toString()
+
+            val repository = CourseRepository(MyApp.supabase)
+
+            quizViewModel = ViewModelProvider(
+                this,
+                QuizViewModelFactory(quizId, repository)
+            )[QuizViewModel::class.java]
+
+            lifecycleScope.launch {
+                quizViewModel.uiState.collect { state ->
+                    when (state) {
+                        is QuizUiState.Loading -> showLoading()
+                        is QuizUiState.ShowQuestion -> showQuestion(state.question, state.index, state.total)
+                        is QuizUiState.ShowFeedback -> showFeedbackScreen(state.isCorrect)
+                        is QuizUiState.Finished -> showResultScreen(state.totalXp)
+                        is QuizUiState.Error -> showErrorScreen(state.message)
+                    }
+                }
+            }
+
         }
 
-        supportFragmentManager.commit {
-            replace(R.id.quizFragmentContainer, fragment)
+        private fun showQuestion(question: Question, index: Int, total: Int) {
+            val savedAnswer = answers[question.id]
+
+            val fragment = when (question.questionType) {
+                "match" -> MatchFragment.newInstance(question)
+                "fill_in_the_blank" -> FillInTheBlankFragment() // TODO: add newInstance() method
+                "multiple_choice" -> MultipleChoiceFragment.newInstance(question, savedAnswer)
+                else -> {
+                    Log.e("QuizRunnerActivity", "Unknown question type: ${question.questionType}")
+                    return
+                }
+            }
+
+            supportFragmentManager.commit {
+                replace(R.id.quizFragmentContainer, fragment)
+            }
         }
-    }
 
-    fun onAnswerSelected(questionId: Long, selectedAnswer: String) {
-        answers[questionId] = selectedAnswer
-    }
+        private fun showLoading() {
+            val fragment = LoadingFragment()
+            supportFragmentManager.commit {
+                replace(R.id.quizFragmentContainer, fragment)
+            }
+        }
 
-    fun submitAnswer(isCorrect: Boolean) {
-        quizViewModel.submitAnswer(isCorrect)
-        Handler(Looper.getMainLooper()).postDelayed({
-            showQuestion()
-        }, 5000)
-    }
+        private fun showErrorScreen(message: String) {
+            val fragment = ErrorFragment.newInstance(message)
+            supportFragmentManager.commit {
+                replace(R.id.quizFragmentContainer, fragment)
+            }
+        }
+
+        private fun showFeedbackScreen(isCorrect: Boolean) {
+            val fragment = QuestionFeedbackFragment.newInstance(isCorrect)
+            supportFragmentManager.commit {
+                replace(R.id.quizFragmentContainer, fragment)
+            }
+        }
+
+        private fun showResultScreen(totalXp: Int) {
+            val intent = Intent(this, QuizResultActivity::class.java)
+            intent.putExtra("totalXp", totalXp)
+            startActivity(intent)
+            finish()
+        }
+
+        fun onAnswerSelected(questionId: Long, selectedAnswer: String) {
+            answers[questionId] = selectedAnswer
+        }
+
+        fun submitAnswer(isCorrect: Boolean) {
+            quizViewModel.handleAnswer(isCorrect)
+        }
+
+        fun retryFetchQuestions() {
+
+        }
 }

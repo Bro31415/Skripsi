@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ import com.example.skripsi.data.model.Question
 import com.example.skripsi.ui.course.quiz.matchwords.MatchViewModelFactory
 import com.example.skripsi.ui.screens.MatchScreen
 import com.example.skripsi.viewmodel.MatchViewModel
+import com.example.skripsi.viewmodel.QuizViewModel
 import java.util.Collections
 
 // TODO: Rename parameter arguments, choose names that match
@@ -32,6 +34,7 @@ class MatchFragment : Fragment() {
 
     private var question: Question? = null
     private lateinit var viewModel: MatchViewModel
+    private val quizViewModel: QuizViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +64,9 @@ class MatchFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme {
-                    MatchScreen()
+                    MatchScreen(viewModel) { isCorrect ->
+                        (activity as? QuizRunnerActivity)?.submitAnswer(isCorrect)
+                    }
                 }
             }
         }

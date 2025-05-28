@@ -24,7 +24,7 @@ class MatchViewModel(private val question: Question) : ViewModel() {
     fun selectWord(word: String) {
         if (word !in selectedWords) {
             selectedWords = selectedWords + word
-            validateAnswer()
+            updateAnswerStatus()
         }
     }
 
@@ -33,9 +33,14 @@ class MatchViewModel(private val question: Question) : ViewModel() {
         isAnswerCorrect = null
     }
 
-    private fun validateAnswer() {
-        val userSentence = selectedWords.joinToString(" ").replace(" ?", "?")
+    private fun updateAnswerStatus() {
+        val userSentence = selectedWords.joinToString(" ").replace(" ?", "?") // TODO: replace this hardcoded piece for joining strings
         isAnswerCorrect = userSentence == correctSentence
+    }
+
+    fun checkAnswer(): Boolean {
+        val userSentence = selectedWords.joinToString(" ").replace(" ?", "?") // TODO: replace this hardcoded piece for joining strings
+        return userSentence == correctSentence
     }
 
     fun reset() {
