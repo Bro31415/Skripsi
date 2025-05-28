@@ -1,8 +1,6 @@
 package com.example.skripsi.ui.course.quiz.multiplechoice
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,7 +9,6 @@ import androidx.compose.ui.unit.dp
 import com.example.skripsi.data.model.Question
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelProvider
 import com.example.skripsi.ui.course.QuizRunnerActivity
 
 @Composable
@@ -28,28 +25,28 @@ fun MultipleChoiceScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        MultipleChoiceContent(vm)
+        MultipleChoiceContent(vm, question)
     }
 }
 
 @Composable
-fun MultipleChoiceContent(viewModel: MultipleChoiceViewModel) {
+fun MultipleChoiceContent(viewModel: MultipleChoiceViewModel, question: Question) {
     val questionText = viewModel.questionText
     val options = viewModel.options
     val selected = viewModel.selectedAnswer
-    val isCorrect = viewModel.isAnswerCorrect
+   // val isCorrect = viewModel.isAnswerCorrect
 
-    var showResult by remember { mutableStateOf(false) }
+    //  var showResult by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     val activity = context as? QuizRunnerActivity
 
-    LaunchedEffect(showResult) {
-        if (showResult) {
-            kotlinx.coroutines.delay(3000) // 3 detik
-            activity?.continueQuestion()
-        }
-    }
+//    LaunchedEffect(showResult) {
+//        if (showResult) {
+//            kotlinx.coroutines.delay(3000) // 3 detik
+//            activity?.continueQuestion()
+//        }
+//    }
 
     Column(
         modifier = Modifier
@@ -78,14 +75,12 @@ fun MultipleChoiceContent(viewModel: MultipleChoiceViewModel) {
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     row.forEach { opt ->
-                        val bgColor = when {
-                            isCorrect == true && selected == opt ->
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+                        val isSelected = selected == opt
 
-                            isCorrect == false && selected == opt ->
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
-
-                            else -> MaterialTheme.colorScheme.surface
+                        val bgColor = if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+                        } else {
+                            MaterialTheme.colorScheme.surface
                         }
 
                         OutlinedButton(
@@ -114,42 +109,17 @@ fun MultipleChoiceContent(viewModel: MultipleChoiceViewModel) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        if (!showResult) {
-            Button(
-                onClick = {
-                    if (selected != null) {
-                        showResult = true
-                    }
-                },
-                enabled = selected != null
-            ) {
-                Text("Submit")
-            }
-        } else {
-            val feedbackColor = if (isCorrect == true)
-                MaterialTheme.colorScheme.primaryContainer
-            else
-                MaterialTheme.colorScheme.errorContainer
+        Button(
+            onClick = {
 
-            val feedbackTextColor = if (isCorrect == true)
-                MaterialTheme.colorScheme.onPrimaryContainer
-            else
-                MaterialTheme.colorScheme.onErrorContainer
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .padding(16.dp)
-                    .background(color = feedbackColor, shape = MaterialTheme.shapes.medium),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (isCorrect == true) "Benar!" else "Salah!",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = feedbackTextColor
-                )
-            }
+                if (selected != null) {
+                    val isCorrect = selected == question.answer
+                    activity?.submitAnswer(isCorrect)
+                }
+            },
+            enabled = selected != null
+        ) {
+            Text("Submit")
         }
     }
 }

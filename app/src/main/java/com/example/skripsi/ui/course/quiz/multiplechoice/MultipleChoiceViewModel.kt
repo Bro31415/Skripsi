@@ -26,10 +26,10 @@ class MultipleChoiceViewModel(
 
     // dipanggil saat user pilih opsi
     fun selectAnswer(answer: String) {
-        if (selectedAnswer == null) {
+//        if (selectedAnswer == null) {
             selectedAnswer = answer
             isAnswerCorrect = answer == correctAnswer
             onAnswerSelected(answer)
-        }
+
     }
 }

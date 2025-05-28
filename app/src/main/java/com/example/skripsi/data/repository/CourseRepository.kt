@@ -64,5 +64,4 @@ class CourseRepository (private val supabase: SupabaseClient) {
             emptyList()
         }
     }
-
 }
