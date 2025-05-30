@@ -14,7 +14,10 @@ import androidx.compose.ui.unit.dp
 import com.example.skripsi.viewmodel.FillInTheBlankViewModel
 
 @Composable
-fun FillInTheBlankScreen(viewModel: FillInTheBlankViewModel) {
+fun FillInTheBlankScreen(
+    viewModel: FillInTheBlankViewModel,
+    onResultValidated: (Boolean) -> Unit
+) {
     val selectedAnswer = viewModel.selectedAnswer
     val isAnswerCorrect = viewModel.isAnswerCorrect
 
@@ -38,12 +41,6 @@ fun FillInTheBlankScreen(viewModel: FillInTheBlankViewModel) {
                 Text(text = " _______", modifier = Modifier.padding(horizontal = 4.dp))
                 Text(text = parts.getOrNull(1) ?: "", fontWeight = FontWeight.Bold)
             }
-//            Translation mungkin ntar??
-//            Text(
-//                text = viewModel.question.translation ?: "",
-//                style = MaterialTheme.typography.bodySmall,
-//                color = Color.Gray
-//            )
         }
 
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -70,12 +67,26 @@ fun FillInTheBlankScreen(viewModel: FillInTheBlankViewModel) {
             }
         }
 
-        if (isAnswerCorrect != null) {
-            Text(
-                text = if (isAnswerCorrect) "Benar!" else "Jawaban salah",
-                color = if (isAnswerCorrect) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyLarge
-            )
+        Button(
+            onClick = {
+                viewModel.checkAnswer()
+                isAnswerCorrect?.let { onResultValidated(it) }
+            },
+            enabled = selectedAnswer != null,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .height(48.dp)
+                .width(140.dp)
+        ) {
+            Text(text = "Submit")
         }
+
+//        if (isAnswerCorrect != null) {
+//            Text(
+//                text = if (isAnswerCorrect) "Benar!" else "Jawaban salah",
+//                color = if (isAnswerCorrect) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
+//                style = MaterialTheme.typography.bodyLarge
+//            )
+//        }
     }
 }

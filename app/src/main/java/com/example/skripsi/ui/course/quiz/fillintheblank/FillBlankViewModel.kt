@@ -14,8 +14,13 @@ class FillInTheBlankViewModel(val question: Question) : ViewModel() {
 
     fun selectAnswer(answer: String) {
         selectedAnswer = answer
-        isAnswerCorrect = answer == question.answer
+        isAnswerCorrect = null
     }
+
+    fun checkAnswer() {
+        isAnswerCorrect = selectedAnswer == question.answer
+    }
+
 
     fun reset() {
         selectedAnswer = null
