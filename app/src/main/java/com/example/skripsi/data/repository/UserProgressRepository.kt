@@ -4,12 +4,16 @@ import android.util.Log
 import com.example.skripsi.MyApp.Companion.supabase
 import com.example.skripsi.data.model.User
 import com.example.skripsi.data.model.UserQuizAttempt
+import com.example.skripsi.data.model.UserXp
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
+
+data class UserXpOnly(val xp: Int?)
 
 class UserProgressRepository(
     private val supabaseClient: SupabaseClient
@@ -38,7 +42,7 @@ class UserProgressRepository(
                     filter {
                         eq("id", userId)
                     }
-                }.decodeSingleOrNull<User>()
+                }.decodeSingleOrNull<UserXp>()
 
             val newXp = (currentXp?.xp ?: 0) + xpToAdd
 
