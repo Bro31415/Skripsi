@@ -1,5 +1,8 @@
 package com.example.skripsi.viewmodel
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -12,13 +15,18 @@ import com.example.skripsi.MyApp
 import com.example.skripsi.MyApp.Companion.supabase
 import com.example.skripsi.data.model.Question
 import com.example.skripsi.data.model.Quiz
+import com.example.skripsi.data.model.UserQuizAttempt
 import com.example.skripsi.data.repository.CourseRepository
+import com.example.skripsi.data.repository.UserProgressRepository
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import java.time.Instant
 
 sealed class QuizUiState {
     object Loading : QuizUiState()
@@ -30,7 +38,8 @@ sealed class QuizUiState {
 
 class QuizViewModel(
     private val quizId: String,
-    private val repository: CourseRepository
+    private val courseRepository: CourseRepository,
+    private val userProgressRepository: UserProgressRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<QuizUiState>(QuizUiState.Loading)
@@ -39,16 +48,32 @@ class QuizViewModel(
     private var questions = emptyList<Question>()
     private var questionIndex = 0
     private var totalXp = 0
+    private var totalQuestions = 0
+    private var quizStartTime: Long = 0
+    private var quizEndTime: Long = 0
 
     init {
         fetchQuestions()
+    }
+
+    fun startQuizTimer() {
+        quizStartTime = System.currentTimeMillis()
+    }
+
+    fun endQuizTimer() {
+        quizEndTime = System.currentTimeMillis()
+    }
+
+    fun getQuizDurationInSeconds(): Int {
+        return ((quizEndTime - quizStartTime) / 1000).toInt()
     }
 
     private fun fetchQuestions() {
         viewModelScope.launch {
             try {
                 val quizIdLong = quizId.toLong()
-                questions = repository.getQuestionsByQuizId(quizIdLong)
+                questions = courseRepository.getQuestionsByQuizId(quizIdLong)
+                totalQuestions = questions.size
                 if (questions.isEmpty()) {
                     _uiState.value = QuizUiState.Error("No questions found")
                 } else {
@@ -57,6 +82,7 @@ class QuizViewModel(
                         index = questionIndex + 1,
                         total = questions.size
                     )
+                    quizStartTime = System.currentTimeMillis()
                 }
             } catch (e: Exception) {
                 _uiState.value = QuizUiState.Error("Failed to load quiz: ${e.message}")
@@ -71,7 +97,7 @@ class QuizViewModel(
             }
 
             _uiState.value = QuizUiState.ShowFeedback(isCorrect)
-            delay(5000L)
+            delay(1000L)
 
             questionIndex++
 
@@ -85,5 +111,32 @@ class QuizViewModel(
                 )
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun logQuizResultBlocking(totalXp: Int) {
+        val userId = supabase.auth.currentUserOrNull()?.id ?: return
+        quizEndTime = System.currentTimeMillis()
+
+        val attempt = UserQuizAttempt(
+            userId = userId,
+            quizId = quizId.toLong(),
+            totalQuestions = totalQuestions,
+            xpEarned = totalXp,
+                    quizDuration = getQuizDurationInSeconds(),
+                    startedAt = Instant.ofEpochMilli(quizStartTime).toString(),
+                    finishedAt = Instant.ofEpochMilli(quizEndTime).toString()
+                )
+
+                val inserted = userProgressRepository.insertUserQuizAttempt(attempt)
+                if (!inserted) {
+                    Log.e("QuizViewModel", "Quiz attempt insert failed")
+                }
+
+                val updated = userProgressRepository.updateUserXP(userId, totalXp)
+                if (!updated) {
+                    Log.e("QuizViewModel", "XP update failed")
+                }
+
     }
 }
