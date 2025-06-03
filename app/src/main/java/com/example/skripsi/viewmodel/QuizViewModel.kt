@@ -3,6 +3,7 @@ package com.example.skripsi.viewmodel
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.currentCompositionErrors
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -16,10 +17,12 @@ import com.example.skripsi.MyApp.Companion.supabase
 import com.example.skripsi.data.model.Question
 import com.example.skripsi.data.model.Quiz
 import com.example.skripsi.data.model.UserQuizAttempt
+import com.example.skripsi.data.model.UserXp
 import com.example.skripsi.data.repository.CourseRepository
 import com.example.skripsi.data.repository.UserProgressRepository
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +42,7 @@ sealed class QuizUiState {
 class QuizViewModel(
     private val quizId: String,
     private val courseRepository: CourseRepository,
-    private val userProgressRepository: UserProgressRepository
+    private val userProgressRepository: UserProgressRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<QuizUiState>(QuizUiState.Loading)
@@ -139,4 +142,59 @@ class QuizViewModel(
                 }
 
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun checkAndUnlockFirstTryAchievement(): Boolean {
+        val userId = supabase.auth.currentUserOrNull()?.id ?: return false
+        val achievementKey = "first_try"
+
+        val alreadyUnlocked = userProgressRepository.isAchievementUnlocked(userId, achievementKey)
+        if (!alreadyUnlocked) {
+            val unlockedSuccessfully = userProgressRepository.unlockAchievement(userId, achievementKey)
+            if (unlockedSuccessfully) {
+                Log.d("QuizViewModel", "Achievement '$achievementKey' unlocked for user $userId")
+                return true
+            } else {
+                Log.e("QuizViewModel", "Failed to unlock '$achievementKey' achievement for user $userId")
+                return false
+            }
+        }
+        Log.d("QuizViewModel", "Achievement '$achievementKey' was already unlocked for user $userId")
+        return false
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun checkAndUnlockXpHunterAchievement(): Boolean {
+        val userId = supabase.auth.currentUserOrNull()?.id ?: return false
+        val achievementKey = "xp_hunter"
+
+        val alreadyUnlocked = userProgressRepository.isAchievementUnlocked(userId, achievementKey)
+
+        val currentXp = supabase.from("users")
+            .select(columns = Columns.list("xp")) {
+                filter {
+                    eq("id", userId)
+                }
+            }.decodeSingleOrNull<UserXp>()
+
+        val xpOrDefault = currentXp?.xp?: 0
+
+        if (!alreadyUnlocked && xpOrDefault >= 100) {
+            val unlockedSuccessfully = userProgressRepository.unlockAchievement(userId, achievementKey)
+            if (unlockedSuccessfully) {
+                Log.d("QuizViewModel", "Achievement '$achievementKey' unlocked for user $userId")
+                return true
+            } else {
+                Log.e("QuizViewModel", "Failed to unlock '$achievementKey' achievement for user $userId")
+                return false
+            }
+        }
+        Log.d("QuizViewModel", "Achievement '$achievementKey' was already unlocked for user $userId")
+        return false
+    }
 }
+
+
+
+
+

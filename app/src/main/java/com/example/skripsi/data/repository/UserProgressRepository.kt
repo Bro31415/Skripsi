@@ -1,5 +1,6 @@
 package com.example.skripsi.data.repository
 
+import UserAchievement
 import android.util.Log
 import com.example.skripsi.MyApp.Companion.supabase
 import com.example.skripsi.data.model.User
@@ -11,9 +12,6 @@ import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
-
-data class UserXpOnly(val xp: Int?)
 
 class UserProgressRepository(
     private val supabaseClient: SupabaseClient
@@ -55,6 +53,43 @@ class UserProgressRepository(
             true
         } catch (e: Exception) {
             Log.e("UserProgressRepo", "Failed to update user xp", e)
+            false
+        }
+    }
+
+    suspend fun unlockAchievement(userId: String, achievementKey: String): Boolean {
+        return try {
+            val unlockedAt = kotlinx.datetime.Clock.System.now().toString()
+
+            supabase.from("user_achievement")
+                .insert(
+                    mapOf(
+                        "user_id" to userId,
+                        "achievement_key" to achievementKey,
+                        "unlocked_at" to unlockedAt
+                    )
+                )
+            true
+        } catch (e: Exception) {
+            Log.e("UserProgressRepo", "Failed to unlock achievement", e)
+            false
+        }
+    }
+
+    suspend fun isAchievementUnlocked(userId: String, achievementKey: String): Boolean {
+        return try {
+            val result = supabase.from("user_achievement")
+                .select {
+                    filter {
+                        eq("user_id", userId)
+                        eq("achievement_key", achievementKey)
+                    }
+                    limit(1)
+                }
+                .decodeList<UserAchievement>()
+            result.isNotEmpty()
+        } catch (e: Exception) {
+            Log.e("UserProgressRepo", "Failed to check achievement", e)
             false
         }
     }

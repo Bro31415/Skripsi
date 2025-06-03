@@ -115,26 +115,29 @@ class QuizRunnerActivity : AppCompatActivity() {
             }
         }
 
-        @RequiresApi(Build.VERSION_CODES.O)
-        private fun showResultScreen(totalXp: Int) {
-            quizViewModel.endQuizTimer()
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showResultScreen(totalXp: Int) {
+        quizViewModel.endQuizTimer()
 
-
-            lifecycleScope.launch {
+        lifecycleScope.launch {
             quizViewModel.logQuizResultBlocking(totalXp)
-                val intent = Intent(this@QuizRunnerActivity, QuizResultActivity::class.java)
-                intent.putExtra("totalXp", totalXp)
-                startActivity(intent)
 
-                delay(300)
-                finish()
-            }
+            val wasFirstTryUnlocked = quizViewModel.checkAndUnlockFirstTryAchievement()
+            val wasXpHunterUnlocked = quizViewModel.checkAndUnlockXpHunterAchievement()
 
+            val intent = Intent(this@QuizRunnerActivity, QuizResultActivity::class.java)
+            intent.putExtra("totalXp", totalXp)
+            intent.putExtra("wasFirstTryAchievementUnlocked", wasFirstTryUnlocked)
+            intent.putExtra("wasXpHunterAchievementUnlocked", wasXpHunterUnlocked)
+            startActivity(intent)
 
-
+            delay(300)
+            finish()
         }
+    }
 
-        fun onAnswerSelected(questionId: Long, selectedAnswer: String) {
+
+    fun onAnswerSelected(questionId: Long, selectedAnswer: String) {
             answers[questionId] = selectedAnswer
         }
 
