@@ -139,18 +139,6 @@ class UserRepository {
         }
     }
 
-//    suspend fun getAllUsers(): List<User> {
-//        return withContext(Dispatchers.IO) {
-//            try {
-//                val result = MyApp.supabase.postgrest.from("users").select().decodeList<User>()
-//                result.filter { it.xp != null } // Filter user yang XP-nya null
-//            } catch (e: Exception) {
-//                Log.e("UserRepository", "Failed to fetch users: ${e.message}")
-//                emptyList()
-//            }
-//        }
-//    }
-
     suspend fun getTopUsers(limit: Int = 15): List<User> {
         return withContext(Dispatchers.IO) {
             try {
@@ -164,6 +152,19 @@ class UserRepository {
             } catch (e: Exception) {
                 Log.e("UserRepository", "Failed to get top users: ${e.message}")
                 emptyList()
+            }
+        }
+    }
+
+    suspend fun logoutUser(): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                MyApp.supabase.auth.signOut()
+                Log.d("UserRepository", "Logout successful")
+                true
+            } catch (e: Exception) {
+                Log.e("UserRepository", "Logout failed: ${e.message}")
+                false
             }
         }
     }

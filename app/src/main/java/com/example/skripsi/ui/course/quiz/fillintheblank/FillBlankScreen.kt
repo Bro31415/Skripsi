@@ -80,13 +80,5 @@ fun FillInTheBlankScreen(
         ) {
             Text(text = "Submit")
         }
-
-//        if (isAnswerCorrect != null) {
-//            Text(
-//                text = if (isAnswerCorrect) "Benar!" else "Jawaban salah",
-//                color = if (isAnswerCorrect) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
-//                style = MaterialTheme.typography.bodyLarge
-//            )
-//        }
     }
 }
