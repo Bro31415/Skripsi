@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Skripsi"
         tools:targetApi="tiramisu">
+        <activity android:name=".ui.course.DictionaryActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.course.QuizResultActivity"
             android:exported="false" />
