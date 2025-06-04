@@ -1,46 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.preference.PreferenceCategory
-        app:title="Tampilan">
+    <PreferenceCategory android:title="Tampilan">
+        <Preference
+            android:key="theme"
+            android:title="Tema Aplikasi"
+            android:summary="Ubah tema aplikasi" />
 
-        <androidx.preference.Preference
-            app:key="app_theme"
-            app:title="Tema Aplikasi"
-            app:summary="Pilih tema aplikasi"/>
+        <Preference
+            android:key="font_size"
+            android:title="Ukuran Font"
+            android:summary="Atur ukuran font" />
+    </PreferenceCategory>
 
-        <androidx.preference.Preference
-            app:key="font_size"
-            app:title="Ukuran Font"
-            app:summary="Atur ukuran font aplikasi"/>
+    <PreferenceCategory android:title="Akun">
+        <Preference
+            android:key="notifications"
+            android:title="Notifikasi"
+            android:summary="Kelola notifikasi" />
 
-    </androidx.preference.PreferenceCategory>
+        <Preference
+            android:key="change_password"
+            android:title="Ganti Password"
+            android:summary="Ubah kata sandi akun kamu" />
 
-    <androidx.preference.PreferenceCategory
-        app:title="Akun">
+        <Preference
+            android:key="reset_progress"
+            android:title="Reset Progress"
+            android:summary="Hapus semua progress kamu" />
 
-        <androidx.preference.Preference
-            app:key="notifications"
-            app:title="Notifikasi"
-            app:summary="Atur preferensi notifikasi"/>
+        <Preference
+            android:key="logout"
+            android:title="Keluar dari Aplikasi"
+            android:summary="Log out dari aplikasi" />
+    </PreferenceCategory>
 
-        <androidx.preference.Preference
-            app:key="change_password"
-            app:title="Ganti Password"
-            app:summary="Ubah password akun Anda"/>
-
-        <androidx.preference.Preference
-            app:key="reset_progress"
-            app:title="Reset Progress"
-            app:summary="Kembalikan progress ke awal"/>
-
-        <androidx.preference.Preference
-            app:key="logout"
-            app:title="Keluar dari Aplikasi"
-            app:summary="Keluar dari akun Anda"/>
-
-    </androidx.preference.PreferenceCategory>
-
-</androidx.preference.PreferenceScreen>
+</PreferenceScreen>
