@@ -45,22 +45,29 @@ fun FillInTheBlankScreen(
 
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             viewModel.question.options?.forEach { option ->
+                val isSelected = option == selectedAnswer
+
                 Card(
                     shape = RoundedCornerShape(12.dp),
-                    border = BorderStroke(1.dp, Color.LightGray),
+                    border = BorderStroke(2.dp, if (isSelected) MaterialTheme.colorScheme.primary else Color.LightGray),
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { viewModel.selectAnswer(option) }
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else Color.White
+                    )
                 ) {
                     Box(
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier
+                            .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = option,
                             fontWeight = FontWeight.Medium,
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Black
                         )
                     }
                 }
