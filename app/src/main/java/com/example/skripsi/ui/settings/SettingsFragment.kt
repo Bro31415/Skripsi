@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.skripsi.MyApp
 import com.example.skripsi.R
+import com.example.skripsi.data.repository.UserProgressRepository
 import com.example.skripsi.data.repository.UserRepository
 import com.example.skripsi.ui.auth.SignInActivity
 import com.example.skripsi.ui.auth.ForgotPasswordActivity
+import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
 
 
@@ -21,6 +23,7 @@ class SettingsFragment : Fragment() {
 
     private lateinit var btnResetPassword: Button
     private lateinit var btnLogout: Button
+    private lateinit var btnResetProgress: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +42,33 @@ class SettingsFragment : Fragment() {
             logout()
         }
 
+        btnResetProgress.setOnClickListener {
+            resetXp()
+        }
+
         return view
     }
 
     private fun resetPassword() {
         val intent = Intent(requireContext(), ForgotPasswordActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun resetXp() {
+        lifecycleScope.launch {
+            val userId = MyApp.supabase.auth.currentUserOrNull()?.id
+            if (userId == null) {
+                Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+
+            val success = UserProgressRepository(MyApp.supabase).resetUserXp(userId)
+            if (success) {
+                Toast.makeText(requireContext(), "XP berhasil direset", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Gagal mereset XP", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun logout() {

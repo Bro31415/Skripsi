@@ -1,12 +1,14 @@
 package com.example.skripsi.data.repository
 
 import android.util.Log
+import com.example.skripsi.MyApp
 import com.example.skripsi.MyApp.Companion.supabase
 import com.example.skripsi.data.model.User
 import com.example.skripsi.data.model.UserQuizAttempt
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -52,6 +54,25 @@ class UserProgressRepository(
         } catch (e: Exception) {
             Log.e("UserProgressRepo", "Failed to update user xp", e)
             false
+        }
+    }
+
+    suspend fun resetUserXp(userId: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                supabaseClient.postgrest.from("users").update({
+                    set("xp", 0L)
+                }) {
+                    filter {
+                        eq("id", userId)
+                    }
+                }
+                Log.d("UserRepository", "XP reset successful for userId: $userId")
+                true
+            } catch (e: Exception) {
+                Log.e("UserRepository", "Failed to reset XP: ${e.message}")
+                false
+            }
         }
     }
 
