@@ -111,4 +111,5 @@ dependencies {
 
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0")
 
+    implementation ("androidx.preference:preference:1.2.1")
 }

@@ -1,65 +1,64 @@
 package com.example.skripsi.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.lifecycleScope
+import com.example.skripsi.MyApp
 import com.example.skripsi.R
+import com.example.skripsi.data.repository.UserRepository
+import com.example.skripsi.ui.auth.SignInActivity
+import com.example.skripsi.ui.auth.ForgotPasswordActivity
+import kotlinx.coroutines.launch
+
 
 class SettingsFragment : Fragment() {
+
+    private lateinit var btnResetPassword: Button
+    private lateinit var btnLogout: Button
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
-//        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_settings)
-//        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-//
-//        val settingsList = listOf(
-//            SettingsItem("Tema Aplikasi", R.drawable.ic_theme),
-//            SettingsItem("Ukuran Font", R.drawable.ic_font),
-//            SettingsItem("Notifikasi", R.drawable.ic_notifications),
-//            SettingsItem("Ganti Password", R.drawable.ic_password),
-//            SettingsItem("Reset Progress", R.drawable.ic_reset),
-//            SettingsItem("Keluar dari Aplikasi", R.drawable.ic_logout)
-//        )
-//
-//        recyclerView.adapter = SettingsAdapter(settingsList) { selectedItem ->
-//            // Handle item click here (e.g., navigate to another fragment or show a dialog)
-//        }
+        btnResetPassword = view.findViewById(R.id.btn_reset_password)
+        btnLogout = view.findViewById(R.id.btn_logout)
+
+        btnResetPassword.setOnClickListener {
+            resetPassword()
+        }
+
+        btnLogout.setOnClickListener {
+            logout()
+        }
 
         return view
     }
+
+    private fun resetPassword() {
+        val intent = Intent(requireContext(), ForgotPasswordActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun logout() {
+        lifecycleScope.launch {
+            val success = UserRepository().logoutUser()
+            if (success) {
+                Toast.makeText(requireContext(), "Berhasil logout", Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireContext(), SignInActivity::class.java)
+                startActivity(intent)
+                activity?.finishAffinity()
+            } else {
+                Toast.makeText(requireContext(), "Gagal logout", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }
-
-// Data model for settings items
-data class SettingsItem(val title: String, val iconRes: Int)
-
-// RecyclerView Adapter
-//class SettingsAdapter(
-//    private val items: List<SettingsItem>,
-//    private val onItemClick: (SettingsItem) -> Unit
-//) : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>() {
-//
-//    inner class SettingsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-//        fun bind(item: SettingsItem) {
-//            itemView.findViewById<TextView>(R.id.text_setting).text = item.title
-//            itemView.findViewById<ImageView>(R.id.icon_setting).setImageResource(item.iconRes)
-//            itemView.setOnClickListener { onItemClick(item) }
-//        }
-//    }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_setting, parent, false)
-//        return SettingsViewHolder(view)
-//    }
-//
-//    override fun onBindViewHolder(holder: SettingsViewHolder, position: Int) {
-//        holder.bind(items[position])
-//    }
-//
-//    override fun getItemCount() = items.size
-//}

@@ -13,6 +13,7 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.ktor.util.reflect.instanceOf
 import java.lang.reflect.Array.set
 
+
 class UserRepository {
 
     suspend fun signUpUser(
@@ -133,6 +134,36 @@ class UserRepository {
                 true
             } catch (e: Exception) {
                 Log.e("UserProfile", "Failed to update username: ${e.message}")
+                false
+            }
+        }
+    }
+
+    suspend fun getTopUsers(limit: Int = 15): List<User> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val users = MyApp.supabase.postgrest.from("users")
+                    .select()
+                    .decodeList<User>()
+
+                users.filter { user -> user.xp != null }
+                    .sortedByDescending { user -> user.xp }
+                    .take(limit)
+            } catch (e: Exception) {
+                Log.e("UserRepository", "Failed to get top users: ${e.message}")
+                emptyList()
+            }
+        }
+    }
+
+    suspend fun logoutUser(): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                MyApp.supabase.auth.signOut()
+                Log.d("UserRepository", "Logout successful")
+                true
+            } catch (e: Exception) {
+                Log.e("UserRepository", "Logout failed: ${e.message}")
                 false
             }
         }
