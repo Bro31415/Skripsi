@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TextAppearance.Skripsi.PlusJakarta.Small">
+    <!-- Fonts -->
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.Small" parent="">
         <item name="android:fontFamily">@font/plusjkt_regular</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="TextAppearance.Skripsi.PlusJakarta.Medium">
+    <style name="TextAppearance.Skripsi.PlusJakarta.Medium" parent="">
         <item name="android:fontFamily">@font/plusjkt_semibold</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.Mattone" parent="">
+        <item name="android:fontFamily">@font/mattone</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="TextAppearance.Skripsi.ClimateCrisis.Logo" parent="">
@@ -17,6 +24,13 @@
         <item name="android:textSize">64sp</item>
     </style>
 
+    <style name="TextAppearance.Skripsi.ClimateCrisis.PageHeading" parent="">
+        <item name="android:fontFamily">@font/climatecrisis</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Buttons -->
 
     <style name="ShapeAppearance.Skripsi.Button.Pill" parent="">
         <item name="cornerFamily">rounded</item>
@@ -40,5 +54,24 @@
         <item name="android:backgroundTint">#6AFF8A </item>
         <item name="android:textColor">#000000</item>
     </style>
+
+    <!-- Textbox -->
+
+    <style name="Skripsi.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxBackgroundColor">@android:color/transparent</item>
+    </style>
+
+
+    <style name="Widget.Skripsi.TextInputEditText" parent="">
+        <item name="android:background">@drawable/edit_text_background</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Skripsi.PlusJakarta.Medium</item>
+    </style>
+
 
 </resources>

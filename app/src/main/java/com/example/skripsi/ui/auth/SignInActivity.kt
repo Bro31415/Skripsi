@@ -8,6 +8,7 @@ import android.text.InputType
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.skripsi.R
@@ -30,7 +31,7 @@ class SignInActivity : AppCompatActivity() {
 
         val btnSignIn = findViewById<Button>(R.id.btn_signin)
         val btnTogglePassword = findViewById<ImageButton>(R.id.btn_togglePassword)
-        val btnForgotPassword = findViewById<Button>(R.id.btn_forgotpassword)
+        val btnForgotPassword = findViewById<TextView>(R.id.btn_forgotpassword)
 
         val userRepository = UserRepository()
         val authViewModel:AuthViewModel by viewModels {AuthViewModelFactory(userRepository)}
