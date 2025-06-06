@@ -1,47 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
+    android:background="#0D68F8"
     tools:context=".ui.OnboardActivity">
 
     <TextView
-        android:id="@+id/tv_signin"
-        style="@style/plusjkt.small"
-        android:layout_width="wrap_content"
+        android:id="@+id/textViewLogo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="Ayo mulai perjalananmu!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="48dp"
+        android:text="Halo!"
+        android:textAppearance="@style/TextAppearance.Skripsi.ClimateCrisis.Logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_signin"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/textViewSubtitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="Sign In"
-        />
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="0"
+        android:layout_marginEnd="48dp"
+        android:text="Yuk, lestarikan bahasa Sunda sambil belajar seru bersama kami!"
+        android:textAppearance="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLogo" />
 
     <TextView
         android:id="@+id/tv_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:text="Baru mengenal SundaKu?"
-        />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:textAppearance="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/tv_signup2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_signup2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:text="Ayo mulai perjalananmu!"
+        android:textAppearance="@style/TextAppearance.Skripsi.PlusJakarta.Small"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/btn_signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
         android:id="@+id/btn_signup"
-        android:layout_width="wrap_content"
+        style="@style/Skripsi.Button.Confirmation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="Sign Up"
-        />
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:text="Daftar"
+        app:layout_constraintBottom_toTopOf="@+id/tv_signin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_signin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="Sudah mempunyai akun?"
+        android:textAppearance="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/tv_signin2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_signin2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:text="Mari lanjutkan perjalananmu!"
+        android:textAppearance="@style/TextAppearance.Skripsi.PlusJakarta.Small"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/btn_signin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_signin"
+        style="@style/Skripsi.Button.Normal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="48dp"
+        android:text="Masuk"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
