@@ -29,6 +29,12 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">20sp</item>
     </style>
+    
+    <style name="TextAppearance.Skripsi.ToolbarTitle" parent="">
+        <item name="android:fontFamily">@font/mattone</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 
     <!-- Buttons -->
 

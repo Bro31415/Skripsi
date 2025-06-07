@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Masuk"
         app:titleCentered="true"
-        app:titleTextAppearance="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        app:titleTextAppearance="@style/TextAppearance.Skripsi.ToolbarTitle"
         app:navigationIcon="@drawable/outline_arrow_left" />
 
     <TextView
