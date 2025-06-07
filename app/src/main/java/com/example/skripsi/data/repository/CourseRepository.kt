@@ -53,7 +53,9 @@ class CourseRepository (private val supabase: SupabaseClient) {
                     "answer",
                     "options",
                     "xp",
-                    "created_at")) {
+                    "created_at",
+                    "sentence")) {
+
                     filter {
                         eq("quiz_id", quizId)
                     }

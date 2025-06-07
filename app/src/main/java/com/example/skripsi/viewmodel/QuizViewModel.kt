@@ -34,7 +34,7 @@ import java.time.Instant
 sealed class QuizUiState {
     object Loading : QuizUiState()
     data class ShowQuestion(val question: Question, val index: Int, val total: Int) : QuizUiState()
-    data class ShowFeedback(val isCorrect: Boolean) : QuizUiState()
+    data class ShowFeedback(val isCorrect: Boolean, val correctSentence: String?) : QuizUiState()
     data class Finished(val totalXp: Int) : QuizUiState()
     data class Error(val message: String) : QuizUiState()
 }
@@ -94,14 +94,15 @@ class QuizViewModel(
     }
 
     fun handleAnswer(isCorrect: Boolean) {
-        viewModelScope.launch {
             if (isCorrect) {
                 totalXp += (questions[questionIndex].xp?.toInt() ?: 0)
             }
+            val correctSentence = questions.getOrNull(questionIndex)?.sentence
+            _uiState.value = QuizUiState.ShowFeedback(isCorrect, correctSentence)
+    }
 
-            _uiState.value = QuizUiState.ShowFeedback(isCorrect)
-            delay(1000L)
-
+    fun moveToNextQuestion() {
+        viewModelScope.launch {
             questionIndex++
 
             if (questionIndex >= questions.size) {

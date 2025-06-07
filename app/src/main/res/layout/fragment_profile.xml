@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    tools:context=".ui.ProfileFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/header_card_view"
@@ -26,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="User Profile"
+                android:text="Profil Pengguna"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -35,8 +36,10 @@
 
     <RelativeLayout
         android:id="@+id/profile_image_container"
-        android:layout_width="140dp" android:layout_height="140dp"
-        android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@id/header_card_view"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/header_card_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -44,25 +47,29 @@
             android:id="@+id/iv_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="3dp" android:src="@drawable/default_profile"
+            android:padding="3dp"
+            android:src="@drawable/default_profile"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            app:strokeColor="?attr/colorPrimary" app:strokeWidth="3dp"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="3dp"
             android:contentDescription="Foto Profil"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btn_edit_profile" android:layout_width="wrap_content"
+            android:id="@+id/btn_edit_profile"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="-12dp" android:layout_marginBottom="-12dp"
+            android:layout_marginEnd="-12dp"
+            android:layout_marginBottom="-12dp"
             android:clickable="true"
             android:focusable="true"
             app:fabSize="mini"
             app:tint="@android:color/white"
             app:srcCompat="@drawable/ic_edit"
             android:contentDescription="Edit Profil Lengkap"
-            app:backgroundTint="@color/design_default_color_primary" />
+            app:backgroundTint="?attr/colorPrimary" />
     </RelativeLayout>
 
     <LinearLayout
@@ -72,7 +79,8 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:paddingHorizontal="16dp"
-        android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@id/profile_image_container"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/profile_image_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -80,28 +88,66 @@
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Pengguna Keren"
-            android:textSize="32sp" android:textStyle="bold"
-            android:textColor="@android:color/black"/>
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            tools:text="Nama Pengguna"/>
 
         <TextView
             android:id="@+id/tv_xp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="XP: 1250"
             android:textSize="20sp"
-            android:textColor="#616161"/>
+            android:textColor="#616161"
+            tools:text="XP: 1250"/>
 
         <TextView
             android:id="@+id/tv_join_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Anggota sejak Januari 2023"
             android:textSize="16sp"
-            android:textColor="#616161" />
+            android:textColor="#616161"
+            tools:text="Anggota sejak 2025" />
 
     </LinearLayout>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/achievements_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/user_info_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pencapaian"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+            <LinearLayout
+                android:id="@+id/ll_achievements_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:paddingTop="8dp"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

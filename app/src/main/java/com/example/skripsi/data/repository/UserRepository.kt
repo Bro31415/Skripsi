@@ -1,5 +1,6 @@
 package com.example.skripsi.data.repository
 
+import Achievement
 import com.example.skripsi.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,6 +11,7 @@ import com.example.skripsi.data.model.User
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import io.ktor.util.reflect.instanceOf
 import java.lang.reflect.Array.set
 
@@ -166,6 +168,34 @@ class UserRepository {
                 Log.e("UserRepository", "Logout failed: ${e.message}")
                 false
             }
+        }
+    }
+
+    suspend fun getUserAchievements(userId: String): List<Achievement> {
+        try {
+            val achievementKeys = MyApp.supabase.from("user_achievement")
+                .select(columns = Columns.list("achievement_key")) {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeList<Map<String, String>>()
+                .mapNotNull { it["achievement_key"] }
+            if (achievementKeys.isEmpty()) {
+                return emptyList()
+            }
+
+
+            return MyApp.supabase.from("achievements")
+                .select{
+                    filter{
+                        isIn("key", achievementKeys)
+                    }
+                }
+                .decodeList()
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Error fetching user achievements: ${e.message}")
+            return emptyList()
         }
     }
 }

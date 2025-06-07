@@ -3,12 +3,8 @@ package com.example.skripsi.ui.course
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.widget.Button
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
@@ -25,16 +21,20 @@ import com.example.skripsi.ui.course.quiz.state.LoadingFragment
 import com.example.skripsi.viewmodel.QuizUiState
 import com.example.skripsi.viewmodel.QuizViewModel
 import com.example.skripsi.viewmodel.factory.QuizViewModelFactory
-import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import android.speech.tts.TextToSpeech
+import android.widget.Toast
+import java.util.Locale
 
-class QuizRunnerActivity : AppCompatActivity() {
+class QuizRunnerActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         private lateinit var quizViewModel: QuizViewModel
         private lateinit var quizId: String
         private var hasStartedQuiz = false
         private val answers = mutableMapOf<Long, String>()
+        private lateinit var tts: TextToSpeech
+        private var isTtsReady = false
 
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +49,7 @@ class QuizRunnerActivity : AppCompatActivity() {
                 return
             }
             quizId = quizIdLong.toString()
+            tts = TextToSpeech(this, this)
 
             val courseRepository = CourseRepository(MyApp.supabase)
             val userProgressRepository = UserProgressRepository(MyApp.supabase)
@@ -63,7 +64,7 @@ class QuizRunnerActivity : AppCompatActivity() {
                     when (state) {
                         is QuizUiState.Loading -> showLoading()
                         is QuizUiState.ShowQuestion -> showQuestion(state.question, state.index, state.total)
-                        is QuizUiState.ShowFeedback -> showFeedbackScreen(state.isCorrect)
+                        is QuizUiState.ShowFeedback -> showFeedbackScreen(state.isCorrect, state.correctSentence)
                         is QuizUiState.Finished -> showResultScreen(state.totalXp)
                         is QuizUiState.Error -> showErrorScreen(state.message)
                     }
@@ -108,8 +109,49 @@ class QuizRunnerActivity : AppCompatActivity() {
             }
         }
 
-        private fun showFeedbackScreen(isCorrect: Boolean) {
-            val fragment = QuestionFeedbackFragment.newInstance(isCorrect)
+        override fun onInit(status: Int) {
+            if (status == TextToSpeech.SUCCESS) {
+                val sundaneseLocale = Locale("su", "ID")
+                val result = tts.setLanguage(sundaneseLocale)
+
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("TTS", "Bahasa Sunda tidak didukung atau perlu diunduh.")
+                    isTtsReady = false
+                    Toast.makeText(this, "Unduh data sora Sunda di Setélan TTS Anjeun", Toast.LENGTH_LONG).show()
+                } else {
+                    Log.i("TTS", "Mesin TTS siap dengan Bahasa Sunda.")
+                    isTtsReady = true
+                }
+            } else {
+                Log.e("TTS", "Inisialisasi TTS Gagal!")
+                isTtsReady = false
+            }
+        }
+
+
+        fun speakSentence(sentence: String?) {
+            if (isTtsReady && !sentence.isNullOrBlank()) {
+                tts.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, null)
+            } else if (sentence.isNullOrBlank()) {
+                Log.w("TTS", "Kalimat kosong, tidak ada yang dibacakan.")
+            }
+            else {
+                Log.e("TTS", "TTS belum siap.")
+                Toast.makeText(this, "Fitur sora teu acan sayogi", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+        override fun onDestroy() {
+            if (::tts.isInitialized) {
+                tts.stop()
+                tts.shutdown()
+            }
+            super.onDestroy()
+        }
+
+        private fun showFeedbackScreen(isCorrect: Boolean, sentence: String?) {
+            val fragment = QuestionFeedbackFragment.newInstance(isCorrect, sentence)
             supportFragmentManager.commit {
                 replace(R.id.quizFragmentContainer, fragment)
             }
@@ -145,7 +187,15 @@ class QuizRunnerActivity : AppCompatActivity() {
             quizViewModel.handleAnswer(isCorrect)
         }
 
+    fun userWantsToContinue() {
+        quizViewModel.moveToNextQuestion()
+    }
+
         fun retryFetchQuestions() {
 //            quizViewModel.retryFetchQuestions()
         }
+
+
+
+
 }

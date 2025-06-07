@@ -1,5 +1,6 @@
 package com.example.skripsi.ui
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -24,7 +25,9 @@ import kotlinx.datetime.toLocalDateTime
 import androidx.activity.result.contract.ActivityResultContracts
 import android.net.Uri
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -100,10 +103,65 @@ class ProfileFragment : Fragment() {
                         .addToBackStack(null)
                         .commit()
                 }
+                loadUserAchievements(userId, view)
             }
         }
     }
 
+    private fun loadUserAchievements(userId: String, view: View) {
+        val achievementsContainer: LinearLayout = view.findViewById(R.id.ll_achievements_container)
+
+        authViewModel.loadUserAchievements(userId) { achievements ->
+            activity?.runOnUiThread {
+                achievementsContainer.removeAllViews()
+
+                if (achievements.isNotEmpty()) {
+                    val previewCount = 1
+                    val previewAchievements = achievements.take(previewCount)
+
+                    for (achievement in previewAchievements) {
+                        val achievementView = TextView(requireContext()).apply {
+                            text = achievement.name
+                            textSize = 16f
+                            setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_achievement_trophy, 0, 0, 0)
+                            compoundDrawablePadding = 16
+                            setPadding(0, 8, 0, 8)
+                        }
+                        achievementsContainer.addView(achievementView)
+                    }
+
+                    if (achievements.size > previewCount) {
+                        val seeAllView = TextView(requireContext()).apply {
+                            text = "Lihat Semua Pencapaian →"
+                            textSize = 16f
+                            setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                            setTypeface(null, Typeface.BOLD)
+                            setPadding(0, 16, 0, 8)
+                            setOnClickListener {
+                                navigateToAchievementsFragment(userId)
+                            }
+                        }
+                        achievementsContainer.addView(seeAllView)
+                    }
+
+                } else {
+                    val noAchievementView = TextView(requireContext()).apply {
+                        text = "Belum ada pencapaian yang diraih."
+                        textSize = 14f
+                    }
+                    achievementsContainer.addView(noAchievementView)
+                }
+            }
+        }
+    }
+
+    private fun navigateToAchievementsFragment(userId: String) {
+        val achievementsFragment = AchievementsFragment.newInstance(userId)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, achievementsFragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
     private fun formatInstantToYear(instant: Instant): String { //nampilin tahun aja
         val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())

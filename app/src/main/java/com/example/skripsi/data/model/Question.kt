@@ -20,5 +20,6 @@ data class Question(
     val options: List<String>? = emptyList(),
     val xp: Short?,
     @SerialName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+    val sentence: String? = null
 ) : Parcelable

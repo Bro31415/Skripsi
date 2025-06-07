@@ -1,5 +1,6 @@
 package com.example.skripsi.viewmodel
 
+import Achievement
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -74,4 +75,12 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
             }
         }
     }
+
+    fun loadUserAchievements(userId: String, onResult: (List<Achievement>) -> Unit) {
+        viewModelScope.launch {
+            val achievements = userRepository.getUserAchievements(userId)
+            onResult(achievements)
+        }
+    }
+
 }
