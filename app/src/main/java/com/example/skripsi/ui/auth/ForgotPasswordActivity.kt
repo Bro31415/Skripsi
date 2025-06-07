@@ -27,12 +27,9 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
 
 
-        var etEmail = findViewById<EditText>(R.id.et_email)
+        var etEmail = findViewById<EditText>(R.id.et_forgotPassword)
 
-        var btnReset = findViewById<Button>(R.id.btn_resetpassword)
-        var btnReturn = findViewById<Button>(R.id.btn_return)
-
-        val tvResetMsg = findViewById<TextView>(R.id.tv_resetmsg)
+        var btnReset = findViewById<Button>(R.id.btn_resetPassword)
 
         val userRepository = UserRepository()
         val authViewModel: AuthViewModel by viewModels { AuthViewModelFactory(userRepository) }
@@ -50,10 +47,9 @@ class ForgotPasswordActivity : AppCompatActivity() {
         authViewModel.resetPasswordResult.observe(this, Observer { result ->
             result?.let {
                 if (it.isSuccess) {
-                    tvResetMsg.visibility = TextView.VISIBLE
-                    Toast.makeText(this, "Tautan reset password berhasil dikirim!", Toast.LENGTH_SHORT).show()
+
                 } else {
-                    Toast.makeText(this, "Gagal mengirim tautan reset password", Toast.LENGTH_SHORT).show()
+
                 }
             }
         })

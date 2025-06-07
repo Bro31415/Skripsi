@@ -17,6 +17,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt
 import com.example.skripsi.data.repository.UserRepository
 import com.example.skripsi.viewmodel.AuthViewModel
 import com.example.skripsi.viewmodel.factory.AuthViewModelFactory
+import com.google.android.material.appbar.MaterialToolbar
 
 //import com.example.skripsi.utils.isEmailValid
 
@@ -34,10 +35,15 @@ class SignUpActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.et_password)
 
         val btnSignUp = findViewById<Button>(R.id.btn_signup)
-        val btnTogglePassword = findViewById<ImageButton>(R.id.btn_togglePassword)
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
 
         val userRepository = UserRepository()
         val authViewModel:AuthViewModel by viewModels {AuthViewModelFactory(userRepository)}
+
+        toolbar.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         // Validate User Input
 //        if (email == null || email == ""){
@@ -55,11 +61,6 @@ class SignUpActivity : AppCompatActivity() {
         // Handle Response
 
         // Navigate to Login
-
-        btnTogglePassword.setOnClickListener {
-            isPasswordVisible = !isPasswordVisible
-            togglePasswordVisibility(etPassword, btnTogglePassword)
-        }
 
         btnSignUp.setOnClickListener{
 
@@ -82,19 +83,7 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
         }
-    }
 
-    private fun togglePasswordVisibility(editText: EditText, imageButton: ImageButton) {
-        if (isPasswordVisible) {
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            imageButton.setImageResource(R.drawable.bold_eye)
-        } else {
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            imageButton.setImageResource(R.drawable.bold_eye_closed)
-        }
-        editText.setSelection(editText.text.length)
-
-        editText.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
 
 }

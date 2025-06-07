@@ -24,8 +24,8 @@
         <item name="android:textSize">64sp</item>
     </style>
 
-    <style name="TextAppearance.Skripsi.ClimateCrisis.PageHeading" parent="">
-        <item name="android:fontFamily">@font/climatecrisis</item>
+    <style name="TextAppearance.Skripsi.Mattone.PageHeading" parent="">
+        <item name="android:fontFamily">@font/mattone</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">20sp</item>
     </style>
@@ -35,6 +35,8 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+
 
     <!-- Buttons -->
 

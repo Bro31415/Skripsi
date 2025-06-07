@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.viewModels
 import com.example.skripsi.R
 import com.example.skripsi.data.repository.UserRepository
@@ -17,6 +18,7 @@ import com.example.skripsi.ui.HomeActivity
 import com.example.skripsi.utils.isEmailValid
 import com.example.skripsi.viewmodel.AuthViewModel
 import com.example.skripsi.viewmodel.factory.AuthViewModelFactory
+import com.google.android.material.appbar.MaterialToolbar
 
 class SignInActivity : AppCompatActivity() {
 
@@ -32,8 +34,14 @@ class SignInActivity : AppCompatActivity() {
         val btnSignIn = findViewById<Button>(R.id.btn_signin)
         val btnForgotPassword = findViewById<TextView>(R.id.btn_forgotpassword)
 
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+
         val userRepository = UserRepository()
         val authViewModel:AuthViewModel by viewModels {AuthViewModelFactory(userRepository)}
+
+        toolbar.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         btnSignIn.setOnClickListener{
             val email = etEmail.text.toString().trim()
