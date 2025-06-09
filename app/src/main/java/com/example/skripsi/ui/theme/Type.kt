@@ -10,7 +10,8 @@ import com.example.skripsi.R
 
 val PlusJakartaSans = FontFamily(
     Font(R.font.plusjkt_regular, FontWeight.Normal),
-    Font(R.font.plusjkt_semibold, FontWeight.SemiBold)
+    Font(R.font.plusjkt_semibold, FontWeight.SemiBold),
+    Font(R.font.plusjkt_bold, FontWeight.Bold)
 )
 
 val Mattone = FontFamily(
@@ -21,6 +22,12 @@ val AppTypography = Typography(
 
     headlineSmall = TextStyle(
         fontFamily = Mattone,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp
+    ),
+
+    titleLarge = TextStyle(
+        fontFamily =  PlusJakartaSans,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp
     ),

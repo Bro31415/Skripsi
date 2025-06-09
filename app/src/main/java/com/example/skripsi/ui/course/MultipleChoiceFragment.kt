@@ -1,5 +1,6 @@
 package com.example.skripsi.ui.course.quiz.multiplechoice
 
+import MultipleChoiceViewModel
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -8,57 +9,51 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.skripsi.data.model.Question
 import com.example.skripsi.ui.course.QuizRunnerActivity
+import com.example.skripsi.ui.theme.AppTheme
 
 class MultipleChoiceFragment : Fragment() {
 
-    companion object {
-        private const val ARG_QUESTION = "arg_question"
-        private const val ARG_SAVED_ANSWER = "arg_saved_answer"
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val question = arguments?.getParcelable<Question>("question")
+            ?: throw IllegalStateException("Question cannot be null")
 
-
-        fun newInstance(question: Question, savedAnswer: String?): MultipleChoiceFragment {
-            return MultipleChoiceFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_QUESTION, question)
-                    putString(ARG_SAVED_ANSWER, savedAnswer)
-                }
-            }
-        }
-    }
-
-    private val question: Question by lazy {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireArguments().getParcelable(ARG_QUESTION, Question::class.java)!!
-        } else {
-            requireArguments().getParcelable(ARG_QUESTION)!!
-        }
-    }
-
-    private val savedAnswer: String? by lazy {
-        requireArguments().getString(ARG_SAVED_ANSWER)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                MaterialTheme {
+                val activity = LocalContext.current as? QuizRunnerActivity
+                val factory = MultipleChoiceViewModelFactory(question)
+                val viewModel: MultipleChoiceViewModel = viewModel(factory = factory)
+                val uiState = viewModel.uiState
+
+                AppTheme {
                     MultipleChoiceScreen(
-                        question = question,
-                        savedAnswer = savedAnswer,
-                        onAnswerSelected = { selected ->
-                            (activity as? QuizRunnerActivity)?.onAnswerSelected(question.id, selected)
+                        uiState = uiState,
+                        onAnswerSelected = viewModel::onAnswerSelected,
+                        onSubmit = {
+                            viewModel.onSubmit()
+                            viewModel.uiState.isCorrect?.let { isCorrect ->
+                                activity?.submitAnswer(isCorrect)
+                            }
                         }
                     )
                 }
             }
         }
     }
+
+    companion object {
+        fun newInstance(question: Question): MultipleChoiceFragment {
+            return MultipleChoiceFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("question", question)
+                }
+            }
+        }
+    }
 }
+
+

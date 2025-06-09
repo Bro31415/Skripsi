@@ -81,8 +81,8 @@ class QuizRunnerActivity : AppCompatActivity() {
 
             val fragment = when (question.questionType) {
                 "match" -> MatchFragment.newInstance(question)
-                "fill_in_the_blank" -> FillInTheBlankFragment.newInstance(question) // TODO: add newInstance() method
-                "multiple_choice" -> MultipleChoiceFragment.newInstance(question, savedAnswer)
+                "fill_in_the_blank" -> FillInTheBlankFragment.newInstance(question)
+                "multiple_choice" -> MultipleChoiceFragment.newInstance(question)
                 else -> {
                     Log.e("QuizRunnerActivity", "Unknown question type: ${question.questionType}")
                     return
