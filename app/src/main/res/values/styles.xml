@@ -8,6 +8,16 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="TextAppearance.Skripsi.PlusJakarta.BottomNavActive" parent="">
+        <item name="android:fontFamily">@font/plusjkt_bold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.BottomNavInactive" parent="">
+        <item name="android:fontFamily">@font/plusjkt_semibold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <style name="TextAppearance.Skripsi.PlusJakarta.Medium" parent="">
         <item name="android:fontFamily">@font/plusjkt_semibold</item>
         <item name="android:textSize">14sp</item>
@@ -67,6 +77,7 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="boxBackgroundColor">@android:color/transparent</item>
+        <item name="cornerSize">20dp</item>
     </style>
 
 

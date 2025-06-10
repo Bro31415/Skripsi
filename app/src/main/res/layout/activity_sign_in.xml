@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".ui.auth.SignInActivity">
+    tools:context=".ui.auth.SignInActivity"
+    android:background="@color/light_blue"
+    >
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -46,7 +48,9 @@
             style="@style/Widget.Skripsi.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:background="@color/white"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,7 +81,8 @@
             style="@style/Widget.Skripsi.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+                android:background="@color/white"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

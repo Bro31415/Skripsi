@@ -19,7 +19,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        app:itemBackground="@drawable/bottom_nav_underline_selector"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation_menu"
+        app:itemTextAppearanceActive="@style/TextAppearance.Skripsi.PlusJakarta.BottomNavActive"
+        app:itemTextAppearanceInactive="@style/TextAppearance.Skripsi.PlusJakarta.BottomNavInactive"
+        app:itemRippleColor="@android:color/transparent"
         />
 
-</RelativeLayout> 
+</RelativeLayout>

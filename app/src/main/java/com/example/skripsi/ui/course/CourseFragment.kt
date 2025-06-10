@@ -124,16 +124,16 @@ fun CourseScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F7))
+            .background(Color(0xFFE6F0FF))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Halo, $userName!", style = MaterialTheme.typography.titleSmall)
+            Text(text = "Halo, $userName!", style = MaterialTheme.typography.titleMedium)
         }
 
         LazyColumn(

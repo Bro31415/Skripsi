@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".ui.auth.SignUpActivity">
+    tools:context=".ui.auth.SignUpActivity"
+    android:background="@color/light_blue"
+    >
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -49,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:background="@color/white"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -80,6 +83,7 @@
         style="@style/Widget.Skripsi.TextInputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -105,7 +109,8 @@
         app:layout_constraintEnd_toEndOf="@id/tv_password"
         app:layout_constraintStart_toStartOf="@id/tv_password"
         app:layout_constraintTop_toBottomOf="@id/tv_password"
-        app:passwordToggleEnabled="true">
+        app:passwordToggleEnabled="true"
+        >
         
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_password"
@@ -113,6 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
+            android:background="@color/white"
             />
         
     </com.google.android.material.textfield.TextInputLayout>
