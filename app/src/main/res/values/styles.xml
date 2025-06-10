@@ -28,6 +28,11 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="TextAppearance.Skripsi.Mattone.Large" parent="">
+        <item name="android:fontFamily">@font/mattone</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="TextAppearance.Skripsi.ClimateCrisis.Logo" parent="">
         <item name="android:fontFamily">@font/climatecrisis</item>
         <item name="android:textColor">@color/white</item>
