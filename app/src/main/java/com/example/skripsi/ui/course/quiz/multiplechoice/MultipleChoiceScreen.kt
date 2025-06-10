@@ -33,9 +33,12 @@ fun MultipleChoiceScreen(
         bottomBar = {
             Button(
                 onClick = onSubmit,
-                colors = ButtonColors(Color(0xFF6AFF8A), Color.Black, Color(0xFF6AFF8A), Color.Black),
                 enabled = uiState.selectedAnswer != null && !uiState.isSubmitted,
                 shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6AFF8A),
+                    contentColor = Color.Black
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)

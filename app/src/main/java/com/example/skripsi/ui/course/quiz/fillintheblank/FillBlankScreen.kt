@@ -33,9 +33,12 @@ fun FillInTheBlankScreen(
         bottomBar = {
             Button(
                 onClick = onSubmit,
-                colors = ButtonColors(Color(0xFF6AFF8A), Color.Black, Color(0xFF6AFF8A), Color.Black),
                 enabled = uiState.selectedAnswer != null && !uiState.isSubmitted,
                 shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6AFF8A),
+                    contentColor = Color.Black
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -68,7 +71,7 @@ fun FillInTheBlankScreen(
 
                 Text(
                     text = uiState.mainQuestion,
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(vertical = 48.dp)
