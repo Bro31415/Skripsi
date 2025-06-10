@@ -36,8 +36,6 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-
-
     <!-- Buttons -->
 
     <style name="ShapeAppearance.Skripsi.Button.Pill" parent="">
@@ -81,5 +79,11 @@
         <item name="android:textAppearance">@style/TextAppearance.Skripsi.PlusJakarta.Medium</item>
     </style>
 
+    <!-- Shapes -->
+
+    <style name="ShapeAppearance.Skripsi.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 
 </resources>

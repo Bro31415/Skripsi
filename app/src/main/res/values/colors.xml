@@ -5,4 +5,7 @@
     <color name="blue">#0267FF</color>
     <color name="light_blue">#E6F0FF</color>
     <color name="green">#6AFF8A</color>
+    <color name="gold">#FFD100</color>
+    <color name="silver">#D7DBDE</color>
+    <color name="bronze">#CD7F32</color>
 </resources>
