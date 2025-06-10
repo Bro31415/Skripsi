@@ -7,8 +7,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,7 +21,7 @@ import com.example.skripsi.viewmodel.DictionaryViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun DictionaryScreen(viewModel: DictionaryViewModel) {
+fun DictionaryScreen(viewModel: DictionaryViewModel, onSpeak: (String) -> Unit) {
     val entries = viewModel.entries.collectAsState().value
     var currentIndex by remember { mutableStateOf(0) }
 
@@ -50,11 +52,28 @@ fun DictionaryScreen(viewModel: DictionaryViewModel) {
                     modifier = Modifier.padding(16.dp)
                 ) { animatedEntry ->
                     Column {
-                        Text(animatedEntry.word, style = MaterialTheme.typography.titleLarge)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = animatedEntry.word,
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.weight(1f)
+                            )
+                            IconButton(onClick = { onSpeak(animatedEntry.word) }) {
+                                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Dengarkan kata")
+                            }
+                        }
                         Spacer(modifier = Modifier.height(8.dp))
                         Text("📌 Definisi:\n${animatedEntry.definition}")
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("💬 Penggunaan:\n${animatedEntry.example}")
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = animatedEntry.example,
+                                modifier = Modifier.weight(1f)
+                            )
+                            IconButton(onClick = { onSpeak(animatedEntry.example) }) {
+                                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Dengarkan contoh")
+                            }
+                        }
                         Spacer(modifier = Modifier.height(8.dp))
                         Text("🔄 Terjemahan:\n${animatedEntry.translation}")
                     }
