@@ -1,127 +1,156 @@
 package com.example.skripsi.ui.course.quiz.multiplechoice
 
+import MultipleChoiceUiState
+import MultipleChoiceViewModel
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.skripsi.data.model.Question
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.example.skripsi.ui.course.QuizRunnerActivity
 
 @Composable
 fun MultipleChoiceScreen(
-    question: Question,
-    savedAnswer: String?,
-    onAnswerSelected: (String) -> Unit
+    uiState: MultipleChoiceUiState,
+    onAnswerSelected: (String) -> Unit,
+    onSubmit: () -> Unit
 ) {
-    // Buat ViewModel dengan question lewat factory
-    val factory = MultipleChoiceViewModelFactory(question, savedAnswer, onAnswerSelected)
-    val vm: MultipleChoiceViewModel = viewModel(factory = factory)
+    Scaffold(
+        bottomBar = {
+            Button(
+                onClick = onSubmit,
+                enabled = uiState.selectedAnswer != null && !uiState.isSubmitted,
+                shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6AFF8A),
+                    contentColor = Color.Black
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(56.dp)
+            ) {
+                Text(
+                    text = "Submit",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        },
+        containerColor = Color(0xFFE6F0FF)
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Pilih arti yang sesuai!",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Text(
+                    text = uiState.questionText,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        MultipleChoiceContent(vm, question)
+            Spacer(modifier = Modifier.weight(1f))
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                items(uiState.options) { option ->
+                    AnswerOption(
+                        text = option,
+                        isSelected = uiState.selectedAnswer == option,
+                        isSubmitted = uiState.isSubmitted,
+                        isCorrectOption = option == uiState.correctAnswer,
+                        onClick = { onAnswerSelected(option) }
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun MultipleChoiceContent(viewModel: MultipleChoiceViewModel, question: Question) {
-    val questionText = viewModel.questionText
-    val options = viewModel.options
-    val selected = viewModel.selectedAnswer
-   // val isCorrect = viewModel.isAnswerCorrect
+fun AnswerOption(
+    text: String,
+    isSelected: Boolean,
+    isSubmitted: Boolean,
+    isCorrectOption: Boolean,
+    onClick: () -> Unit
+) {
+    val greenColor = Color(0xFF6AFF8A)
+    val redColor = Color(0xFFD32F2F)
+    val defaultBorderColor = Color.LightGray
+    val selectedBorderColor = Color(0xFF40A255)
 
-    //  var showResult by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    val borderColor by animateColorAsState(
+        targetValue = when {
+            isSubmitted && isCorrectOption -> selectedBorderColor
+            isSubmitted && isSelected && !isCorrectOption -> redColor
+            isSelected -> selectedBorderColor
+            else -> defaultBorderColor
+        }, label = "Border Color Animation"
+    )
 
-    val activity = context as? QuizRunnerActivity
+    val cardColor by animateColorAsState(
+        targetValue = when {
+            isSubmitted && isCorrectOption -> greenColor
+            isSubmitted && isSelected && !isCorrectOption -> redColor
+            isSelected -> greenColor
+            else -> Color.White
+        }, label = "Card Color Animation"
+    )
 
-//    LaunchedEffect(showResult) {
-//        if (showResult) {
-//            kotlinx.coroutines.delay(3000) // 3 detik
-//            activity?.continueQuestion()
-//        }
-//    }
-
-    Column(
+    Card(
+        shape = RoundedCornerShape(15.dp),
+        border = BorderStroke(2.dp, borderColor),
+        colors = CardDefaults.cardColors(cardColor),
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth()
+            .height(72.dp)
+            .clickable(onClick = onClick)
     ) {
-        // Spacer sebelum pertanyaan (biar tidak terlalu atas)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Teks soal
-        Text(
-            text = questionText,
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Opsi dalam dua kolom
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            options.chunked(2).forEach { row ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    row.forEach { opt ->
-                        val isSelected = selected == opt
-
-                        val bgColor = if (isSelected) {
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
-                        } else {
-                            MaterialTheme.colorScheme.surface
-                        }
-
-                        OutlinedButton(
-                            onClick = { viewModel.selectAnswer(opt) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .defaultMinSize(minHeight = 56.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = bgColor
-                            )
-                        ) {
-                            Text(
-                                text = opt,
-                                style = MaterialTheme.typography.bodyLarge,
-                                maxLines = 2
-                            )
-                        }
-                    }
-
-                    if (row.size == 1) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = {
-
-                if (selected != null) {
-                    val isCorrect = selected == question.answer
-                    activity?.submitAnswer(isCorrect)
-                }
-            },
-            enabled = selected != null
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Text("Submit")
+            Text(
+                text = text,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium
+            )
         }
     }
 }
-
 

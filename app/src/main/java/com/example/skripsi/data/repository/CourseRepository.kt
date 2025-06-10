@@ -5,6 +5,7 @@ import com.example.skripsi.data.model.Chapter
 import com.example.skripsi.data.model.ChapterWithQuizzes
 import com.example.skripsi.data.model.Question
 import com.example.skripsi.data.model.Quiz
+import com.example.skripsi.data.model.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
@@ -64,6 +65,20 @@ class CourseRepository (private val supabase: SupabaseClient) {
         } catch (e: Exception) {
             Log.e("CourseRepo", "Failed to fetch questions for quiz $quizId", e)
             emptyList()
+        }
+    }
+
+    suspend fun getUserProfile(userId: String): User? {
+        return try {
+            supabase.from("users")
+                .select {
+                    filter {
+                        eq("id", userId)
+                    }
+                }.decodeSingleOrNull<User>()
+        } catch (e: Exception) {
+            Log.e("CourseRepository", "Error fetching user profile", e)
+            null
         }
     }
 }

@@ -6,10 +6,10 @@ import com.example.skripsi.data.repository.CourseRepository
 import com.example.skripsi.viewmodel.CourseViewModel
 import io.github.jan.supabase.SupabaseClient
 
-class CourseViewModelFactory (private val repository: CourseRepository) : ViewModelProvider.Factory {
+class CourseViewModelFactory (private val repository: CourseRepository, private val supabase: SupabaseClient) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CourseViewModel(repository) as T
+        return CourseViewModel(repository, supabase) as T
     }
 
 }

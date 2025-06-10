@@ -18,6 +18,7 @@ import com.example.skripsi.data.repository.UserProgressRepository
 import com.example.skripsi.ui.course.quiz.multiplechoice.MultipleChoiceFragment
 import com.example.skripsi.ui.course.quiz.state.ErrorFragment
 import com.example.skripsi.ui.course.quiz.state.LoadingFragment
+import com.example.skripsi.ui.quiz.MatchFragment
 import com.example.skripsi.viewmodel.QuizUiState
 import com.example.skripsi.viewmodel.QuizViewModel
 import com.example.skripsi.viewmodel.factory.QuizViewModelFactory
@@ -82,8 +83,8 @@ class QuizRunnerActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             val fragment = when (question.questionType) {
                 "match" -> MatchFragment.newInstance(question)
-                "fill_in_the_blank" -> FillInTheBlankFragment.newInstance(question) // TODO: add newInstance() method
-                "multiple_choice" -> MultipleChoiceFragment.newInstance(question, savedAnswer)
+                "fill_in_the_blank" -> FillInTheBlankFragment.newInstance(question)
+                "multiple_choice" -> MultipleChoiceFragment.newInstance(question)
                 else -> {
                     Log.e("QuizRunnerActivity", "Unknown question type: ${question.questionType}")
                     return

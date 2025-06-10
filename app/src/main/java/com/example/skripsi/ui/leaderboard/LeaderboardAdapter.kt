@@ -1,19 +1,39 @@
-package com.example.skripsi.ui.leaderboard
+package com.example.skripsi.ui.leaderboard // Or your package
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skripsi.R
 import com.example.skripsi.data.model.User
+import com.google.android.material.imageview.ShapeableImageView
 
-class LeaderboardAdapter(private val users: List<User>) :
-    RecyclerView.Adapter<LeaderboardAdapter.LeaderboardViewHolder>() {
+class LeaderboardAdapter(
+    private var users: List<User>,
+    private val currentUserId: String
+) : RecyclerView.Adapter<LeaderboardAdapter.LeaderboardViewHolder>() {
 
     class LeaderboardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val usernameTextView: TextView = itemView.findViewById(R.id.tvUsername)
-        val xpTextView: TextView = itemView.findViewById(R.id.tvXp)
+        private val cardRoot: CardView = itemView.findViewById(R.id.card_root)
+        private val rankTextView: TextView = itemView.findViewById(R.id.tv_rank)
+        private val avatarImageView: ShapeableImageView = itemView.findViewById(R.id.iv_avatar)
+        private val usernameTextView: TextView = itemView.findViewById(R.id.tvUsername)
+        private val xpTextView: TextView = itemView.findViewById(R.id.tvXp)
+
+        fun bind(user: User, rank: Int, isCurrentUser: Boolean) {
+            rankTextView.text = rank.toString()
+            usernameTextView.text = user.username
+            xpTextView.text = "${user.xp ?: 0} XP"
+            if (isCurrentUser) {
+                cardRoot.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.green))
+            } else {
+                cardRoot.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.white))
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaderboardViewHolder {
@@ -24,8 +44,9 @@ class LeaderboardAdapter(private val users: List<User>) :
 
     override fun onBindViewHolder(holder: LeaderboardViewHolder, position: Int) {
         val user = users[position]
-        holder.usernameTextView.text = user.username
-        holder.xpTextView.text = "${user.xp ?: 0} XP"
+        val rank = position + 4
+        val isCurrentUser = user.id == currentUserId
+        holder.bind(user, rank, isCurrentUser)
     }
 
     override fun getItemCount(): Int = users.size

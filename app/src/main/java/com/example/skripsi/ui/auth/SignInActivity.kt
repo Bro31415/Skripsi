@@ -8,7 +8,9 @@ import android.text.InputType
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.viewModels
 import com.example.skripsi.R
 import com.example.skripsi.data.repository.UserRepository
@@ -16,6 +18,7 @@ import com.example.skripsi.ui.HomeActivity
 import com.example.skripsi.utils.isEmailValid
 import com.example.skripsi.viewmodel.AuthViewModel
 import com.example.skripsi.viewmodel.factory.AuthViewModelFactory
+import com.google.android.material.appbar.MaterialToolbar
 
 class SignInActivity : AppCompatActivity() {
 
@@ -29,15 +32,15 @@ class SignInActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.et_password)
 
         val btnSignIn = findViewById<Button>(R.id.btn_signin)
-        val btnTogglePassword = findViewById<ImageButton>(R.id.btn_togglePassword)
-        val btnForgotPassword = findViewById<Button>(R.id.btn_forgotpassword)
+        val btnForgotPassword = findViewById<TextView>(R.id.btn_forgotpassword)
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
 
         val userRepository = UserRepository()
         val authViewModel:AuthViewModel by viewModels {AuthViewModelFactory(userRepository)}
 
-        btnTogglePassword.setOnClickListener {
-            isPasswordVisible = !isPasswordVisible
-            togglePasswordVisibility(etPassword, btnTogglePassword)
+        toolbar.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
         btnSignIn.setOnClickListener{
@@ -66,18 +69,5 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-    }
-
-    private fun togglePasswordVisibility(editText: EditText, imageButton: ImageButton) {
-        if (isPasswordVisible) {
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            imageButton.setImageResource(R.drawable.bold_eye)
-        } else {
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            imageButton.setImageResource(R.drawable.bold_eye_closed)
-        }
-        editText.setSelection(editText.text.length)
-
-        editText.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
 }
