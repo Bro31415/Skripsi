@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.skripsi.R
 import com.example.skripsi.data.model.User
 import com.google.android.material.imageview.ShapeableImageView
@@ -32,6 +33,17 @@ class LeaderboardAdapter(
                 cardRoot.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.green))
             } else {
                 cardRoot.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.white))
+            }
+
+            if (!user.user_photo_profile.isNullOrBlank()) {
+                Glide.with(itemView.context)
+                    .load(user.user_photo_profile)
+                    .placeholder(R.drawable.default_profile)
+                    .error(R.drawable.default_profile)
+                    .circleCrop()
+                    .into(avatarImageView)
+            } else {
+                avatarImageView.setImageResource(R.drawable.default_profile)
             }
         }
     }

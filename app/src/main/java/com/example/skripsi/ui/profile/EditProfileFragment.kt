@@ -49,7 +49,6 @@ class EditProfileFragment : Fragment() {
 
         val etNewUsername = view.findViewById<EditText>(R.id.et_new_username)
         val btnSaveUsername = view.findViewById<Button>(R.id.btn_save_username)
-        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
         val btnUploadPhoto = view.findViewById<Button>(R.id.btn_upload_photo)
         profileImageView = view.findViewById<ImageView>(R.id.iv_profile)
 
@@ -95,11 +94,6 @@ class EditProfileFragment : Fragment() {
                     Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
                 }
             }
-        }
-
-        // Tombol untuk kembali ke ProfileFragment
-        btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
         }
 
         return view

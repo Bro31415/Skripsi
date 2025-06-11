@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/light_blue"
+    >
 
-    <!-- Header dengan judul dan tombol back -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
         android:paddingHorizontal="16dp">
 
         <ImageButton
@@ -17,20 +17,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/bold_arrow_left" />
+            android:background="@color/light_blue"
+            android:src="@drawable/outline_arrow_left" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="Edit Profil"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textColor="@android:color/black"
+            style="@style/TextAppearance.Skripsi.Mattone.Large"
+            />
+
     </RelativeLayout>
 
-    <!-- Konten utama -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,7 +41,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Foto Profil -->
             <ImageView
                 android:id="@+id/iv_profile"
                 android:layout_width="120dp"
@@ -52,46 +51,53 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_profile" />
 
-            <!-- Tombol Upload Foto -->
             <Button
                 android:id="@+id/btn_upload_photo"
-                style="@style/Widget.AppCompat.Button.Borderless"
+                style="@style/Skripsi.Button.Normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:text="Ubah Foto Profil"
-                android:textColor="?attr/colorPrimary" />
+                />
 
-            <!-- Username Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="Username"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                style="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+                />
 
-            <EditText
-                android:id="@+id/et_new_username"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/newUsernameTextInputLayout"
+                style="@style/Skripsi.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="?attr/colorPrimary"
-                android:hint="Masukkan username baru"
-                android:inputType="text"
-                android:paddingVertical="12dp" />
+                >
 
-            <!-- Tombol Simpan -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_new_username"
+                    style="@style/Widget.Skripsi.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:inputType="text"
+                    android:paddingVertical="12dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/btn_save_username"
+                style="@style/Skripsi.Button.Normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:backgroundTint="?attr/colorPrimary"
+                android:layout_marginTop="8dp"
                 android:text="Simpan"
-                android:textColor="@android:color/white"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

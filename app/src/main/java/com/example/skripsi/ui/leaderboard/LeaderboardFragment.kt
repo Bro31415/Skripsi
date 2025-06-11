@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.skripsi.R
 import com.example.skripsi.data.model.User
 import com.example.skripsi.data.repository.UserRepository
@@ -81,5 +82,15 @@ class LeaderboardFragment : Fragment() {
         username.text = user.username
         xp.text = "${user.xp ?: 0} XP"
 
+        if (!user.user_photo_profile.isNullOrBlank()) {
+            Glide.with(this)
+                .load(user.user_photo_profile)
+                .placeholder(R.drawable.default_profile)
+                .error(R.drawable.default_profile)
+                .circleCrop()
+                .into(avatar)
+        } else {
+            avatar.setImageResource(R.drawable.default_profile)
+        }
     }
 }

@@ -15,25 +15,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/bold_arrow_left"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:contentDescription="Kembali" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/btn_back"
+            android:layout_centerInParent="true"
             android:text="Latihan"
             android:textColor="@android:color/black"
             style="@style/TextAppearance.Skripsi.Mattone.Large"
             />
+
     </RelativeLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
