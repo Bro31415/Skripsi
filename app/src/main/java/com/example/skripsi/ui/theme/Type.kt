@@ -26,6 +26,12 @@ val AppTypography = Typography(
         fontSize = 20.sp
     ),
 
+    headlineMedium = TextStyle(
+        fontFamily = Mattone,
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp
+    ),
+
     titleLarge = TextStyle(
         fontFamily =  PlusJakartaSans,
         fontWeight = FontWeight.Bold,
@@ -35,6 +41,12 @@ val AppTypography = Typography(
     titleMedium = TextStyle(
         fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp
+    ),
+
+    bodyMedium = TextStyle(
+        fontFamily = PlusJakartaSans,
+        fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
 

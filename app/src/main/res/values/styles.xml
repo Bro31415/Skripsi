@@ -8,9 +8,19 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="TextAppearance.Skripsi.PlusJakarta.SmallSemi" parent="">
+        <item name="android:fontFamily">@font/plusjkt_semibold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="TextAppearance.Skripsi.PlusJakarta.MediumSecondary" parent="">
         <item name="android:fontFamily">@font/plusjkt_regular</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.Large" parent="">
+        <item name="android:fontFamily">@font/plusjkt_bold</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="TextAppearance.Skripsi.PlusJakarta.BottomNavActive" parent="">

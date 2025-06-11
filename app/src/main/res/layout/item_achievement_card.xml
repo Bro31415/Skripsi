@@ -31,5 +31,6 @@
             tools:text="[Penghargaan]"
             style="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
             />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

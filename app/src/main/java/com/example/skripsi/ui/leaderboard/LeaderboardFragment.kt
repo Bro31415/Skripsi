@@ -61,7 +61,7 @@ class LeaderboardFragment : Fragment() {
         val rank3Layout = view.findViewById<ConstraintLayout>(R.id.layout_rank_3)
 
         if (topUsers.isNotEmpty()) {
-            bindSingleTopUser(rank1Layout, topUsers[0], R.drawable.bold_crown_star)
+            bindSingleTopUser(rank1Layout, topUsers[0], R.drawable.asset_crown)
         }
 
         if (topUsers.size >= 2) {

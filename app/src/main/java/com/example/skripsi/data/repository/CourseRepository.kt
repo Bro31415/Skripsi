@@ -12,6 +12,28 @@ import io.github.jan.supabase.postgrest.query.Columns
 
 class CourseRepository (private val supabase: SupabaseClient) {
 
+    suspend fun getChapters(): List<Chapter> {
+        return try {
+            supabase.from("chapter")
+                .select()
+                .decodeList<Chapter>()
+        } catch (e: Exception) {
+            Log.e("CourseRepo", "Failed to fetch chapters", e)
+            emptyList()
+        }
+    }
+
+    suspend fun getChapterById(chapterId: Long): Chapter? {
+        return try {
+            supabase.from("chapter").select {
+                filter { eq("id", chapterId) }
+            }.decodeSingleOrNull<Chapter>()
+        } catch (e: Exception) {
+            Log.e("CourseRepo", "Failed to fetch chapter by id: $chapterId", e)
+            null
+        }
+    }
+
     suspend fun getChaptersWithQuizzes(): List<ChapterWithQuizzes> {
         return try {
             val chapters = supabase.from("chapter")
