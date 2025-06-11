@@ -1,5 +1,6 @@
 package com.example.skripsi.ui
 
+import ProfileAchievementsAdapter
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +30,8 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -45,43 +48,54 @@ class ProfileFragment : Fragment() {
     private lateinit var authViewModel: AuthViewModel
     private lateinit var profileImageView: ImageView
 
+    private lateinit var achievementsRecyclerView: RecyclerView
+    private lateinit var achievementsAdapter: ProfileAchievementsAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+        return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         profileImageView = view.findViewById(R.id.iv_profile)
         val userRepository = UserRepository()
         authViewModel = ViewModelProvider(this, AuthViewModelFactory(userRepository)).get(AuthViewModel::class.java)
 
-        val currentUser = MyApp.supabase.auth.currentUserOrNull()
-        val userId = currentUser?.id
+        setupRecyclerView(view)
 
+        val userId = MyApp.supabase.auth.currentUserOrNull()?.id
         if (userId != null) {
             loadUserProfile(userId, view)
+            authViewModel.loadStudyStreak(userId)
         }
 
-        return view
+        viewLifecycleOwner.lifecycleScope.launch {
+            authViewModel.studyStreak.collect { streak ->
+                if (streak != null) {
+                    view.findViewById<TextView>(R.id.tv_streak_value).text = streak.toString()
+                }
+            }
+        }
+    }
+
+    private fun setupRecyclerView(view: View) {
+        achievementsRecyclerView = view.findViewById(R.id.achievementsRecyclerView)
+        achievementsAdapter = ProfileAchievementsAdapter()
+        achievementsRecyclerView.adapter = achievementsAdapter
+        achievementsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
     private fun loadUserProfile(userId: String, view: View) {
         Log.d("ProfileFragment", "User ID: $userId")
         authViewModel.getUserProfile(userId) { user ->
             if (user != null) {
-                // Tampilkan username
                 view.findViewById<TextView>(R.id.tv_username).text = user.username
+                view.findViewById<TextView>(R.id.tv_xp).text = "[${user.xp ?: 0} XP]"
 
-                //Tampilkan XP
-                val xpText = "XP: ${user.xp ?: 0}" // Jika xp null, tampilkan 0
-                view.findViewById<TextView>(R.id.tv_xp).text = xpText
-
-                // Tampilkan tahun join
-                user.created_at?.let { instant ->
-                    val joinYear = formatInstantToYear(instant)
-                    view.findViewById<TextView>(R.id.tv_join_date).text = "Anggota sejak $joinYear"
-                }
-
-                // Tampilkan foto profil jika ada
                 user.user_photo_profile?.let { imageUrl ->
                     Glide.with(this@ProfileFragment)
                         .load(imageUrl)
@@ -90,7 +104,11 @@ class ProfileFragment : Fragment() {
                         .into(profileImageView)
                 }
 
-                // Tombol edit username
+                user.created_at?.let { instant ->
+                    val joinYear = formatInstantToYear(instant)
+                    view.findViewById<TextView>(R.id.tv_join_date_value).text = joinYear
+                }
+
                 view.findViewById<ImageButton>(R.id.btn_edit_profile).setOnClickListener {
                     val editProfileFragment = EditProfileFragment().apply {
                         arguments = Bundle().apply {
@@ -109,47 +127,26 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadUserAchievements(userId: String, view: View) {
-        val achievementsContainer: LinearLayout = view.findViewById(R.id.ll_achievements_container)
+        val seeAllTextView: TextView = view.findViewById(R.id.tv_see_all_achievements)
 
         authViewModel.loadUserAchievements(userId) { achievements ->
             activity?.runOnUiThread {
-                achievementsContainer.removeAllViews()
-
                 if (achievements.isNotEmpty()) {
-                    val previewCount = 1
-                    val previewAchievements = achievements.take(previewCount)
-
-                    for (achievement in previewAchievements) {
-                        val achievementView = TextView(requireContext()).apply {
-                            text = achievement.name
-                            textSize = 16f
-                            setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_achievement_trophy, 0, 0, 0)
-                            compoundDrawablePadding = 16
-                            setPadding(0, 8, 0, 8)
-                        }
-                        achievementsContainer.addView(achievementView)
-                    }
+                    val previewCount = 3
+                    achievementsAdapter.submitList(achievements.take(previewCount))
 
                     if (achievements.size > previewCount) {
-                        val seeAllView = TextView(requireContext()).apply {
-                            text = "Lihat Semua Pencapaian →"
-                            textSize = 16f
-                            setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                            setTypeface(null, Typeface.BOLD)
-                            setPadding(0, 16, 0, 8)
-                            setOnClickListener {
-                                navigateToAchievementsFragment(userId)
-                            }
+                        seeAllTextView.visibility = View.VISIBLE
+                        seeAllTextView.setOnClickListener {
+                            navigateToAchievementsFragment(userId)
                         }
-                        achievementsContainer.addView(seeAllView)
+                    } else {
+                        seeAllTextView.visibility = View.GONE
                     }
-
                 } else {
-                    val noAchievementView = TextView(requireContext()).apply {
-                        text = "Belum ada pencapaian yang diraih."
-                        textSize = 14f
-                    }
-                    achievementsContainer.addView(noAchievementView)
+                    view.findViewById<TextView>(R.id.tv_achievements_title).visibility = View.GONE
+                    achievementsRecyclerView.visibility = View.GONE
+                    seeAllTextView.visibility = View.GONE
                 }
             }
         }

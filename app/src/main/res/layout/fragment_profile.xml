@@ -1,153 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
+    android:background="#E6F0FF"
     tools:context=".ui.ProfileFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/header_card_view"
+    <RelativeLayout
+        android:id="@+id/header_layout"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="?attr/colorPrimary"
-        app:cardCornerRadius="0dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Profil Pengguna"
-                android:textColor="@android:color/white"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-
-    <RelativeLayout
-        android:id="@+id/profile_image_container"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/header_card_view"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp"
-            android:src="@drawable/default_profile"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            app:strokeColor="?attr/colorPrimary"
-            app:strokeWidth="3dp"
-            android:contentDescription="Foto Profil"/>
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/bold_arrow_left"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Kembali" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btn_edit_profile"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="-12dp"
-            android:layout_marginBottom="-12dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:fabSize="mini"
-            app:tint="@android:color/white"
-            app:srcCompat="@drawable/ic_edit"
-            android:contentDescription="Edit Profil Lengkap"
-            app:backgroundTint="?attr/colorPrimary" />
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/btn_back"
+            android:text="Latihan"
+            android:textColor="@android:color/black"
+            style="@style/TextAppearance.Skripsi.Mattone.Large"
+            />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/user_info_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingHorizontal="16dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/profile_image_container"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:id="@+id/tv_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            tools:text="Nama Pengguna"/>
-
-        <TextView
-            android:id="@+id/tv_xp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="20sp"
-            android:textColor="#616161"
-            tools:text="XP: 1250"/>
-
-        <TextView
-            android:id="@+id/tv_join_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            android:textColor="#616161"
-            tools:text="Anggota sejak 2025" />
-
-    </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/achievements_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_profile"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="24dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_layout"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_edit_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Edit Foto Profil"
+        app:backgroundTint="@android:color/black"
+        app:fabSize="mini"
+        app:layout_constraintCircle="@id/iv_profile"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="60dp"
+        app:srcCompat="@drawable/ic_edit"
+        app:tint="@android:color/white"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/black"
+        style="@style/TextAppearance.Skripsi.Mattone.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_profile"
+        tools:text="[Nama Pengguna]" />
+
+    <TextView
+        android:id="@+id/tv_xp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#616161"
+        style="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_username"
+        tools:text="[Total XP]" />
+
+    <TextView
+        android:id="@+id/tv_achievements_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Lencana Penghargaan"
+        android:textColor="@android:color/black"
+        style="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_xp" />
+
+    <TextView
+        android:id="@+id/tv_see_all_achievements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="Lihat Selengkapnya"
+        android:textColor="?attr/colorPrimary"
+        style="@style/TextAppearance.Skripsi.PlusJakarta.Small"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_achievements_title"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/achievementsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_achievements_title"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_achievement_card" />
+
+
+    <TextView
+        android:id="@+id/tv_stats_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Statistik Pengguna"
+        android:textColor="@android:color/black"
+        style="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/achievementsRecyclerView" />
+
+    <LinearLayout
+        android:id="@+id/ll_stats_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/user_info_container"
+        app:layout_constraintTop_toBottomOf="@id/tv_stats_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pencapaian"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"/>
-
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
             <LinearLayout
-                android:id="@+id/ll_achievements_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                android:paddingTop="8dp"/>
+                android:gravity="center"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/tv_join_date_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bergabung Sejak"
+                    android:textColor="#616161"
+                    style="@style/TextAppearance.Skripsi.PlusJakarta.Medium" />
+                <TextView
+                    android:id="@+id/tv_join_date_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@android:color/black"
+                    style="@style/TextAppearance.Skripsi.Mattone.Large"
+                    tools:text="2021" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/tv_streak_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Streak Belajar"
+                    android:textColor="#616161"
+                    style="@style/TextAppearance.Skripsi.PlusJakarta.Medium" />
+                <TextView
+                    android:id="@+id/tv_streak_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@android:color/black"
+                    style="@style/TextAppearance.Skripsi.Mattone.Large"
+                    tools:text="7" />
+                <TextView
+                    android:id="@+id/tv_streak_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hari"
+                    android:textColor="#616161"
+                    style="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+                    />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
