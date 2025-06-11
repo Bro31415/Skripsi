@@ -1,115 +1,157 @@
-package com.example.skripsi.ui.course
-
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.skripsi.viewmodel.DictionaryViewModel
+import androidx.compose.ui.unit.sp
+import com.example.skripsi.data.model.Chapter
+import com.example.skripsi.data.model.Dictionary
+import com.example.skripsi.viewmodel.ChapterWithWords
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DictionaryScreen(viewModel: DictionaryViewModel, onSpeak: (String) -> Unit) {
-    val entries = viewModel.entries.collectAsState().value
-    var currentIndex by remember { mutableStateOf(0) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "📖 Kamus",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
+fun DictionaryScreen(
+    chapter: Chapter?,
+    words: List<Dictionary>,
+    onWordClick: (Long) -> Unit,
+    onBackClick: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFE6F0FF))) {
+        TopAppBar(
+            title = {
+                Text("Kamus", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.headlineSmall) },
+            navigationIcon = {
+                IconButton(onClick = onBackClick) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
         )
 
-        if (entries.isEmpty()) {
-            Text("Tidak ada entri kamus untuk bab ini.")
-        } else {
-            val entry = entries[currentIndex]
+        Column(Modifier.padding(horizontal = 16.dp)) {
+            Text(
+                text = "Bagian ${chapter?.id ?: ""}",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Gray
+            )
+            Text(
+                text = chapter?.name ?: "Memuat...",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
-                elevation = CardDefaults.cardElevation(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                AnimatedContent(
-                    targetState = entry,
-                    modifier = Modifier.padding(16.dp)
-                ) { animatedEntry ->
-                    Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = animatedEntry.word,
-                                style = MaterialTheme.typography.titleLarge,
-                                modifier = Modifier.weight(1f)
-                            )
-                            IconButton(onClick = { onSpeak(animatedEntry.word) }) {
-                                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Dengarkan kata")
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text("📌 Definisi:\n${animatedEntry.definition}")
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = animatedEntry.example,
-                                modifier = Modifier.weight(1f)
-                            )
-                            IconButton(onClick = { onSpeak(animatedEntry.example) }) {
-                                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Dengarkan contoh")
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text("🔄 Terjemahan:\n${animatedEntry.translation}")
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(words) { word ->
+                WordItem(word = word, onClick = { onWordClick(word.id) })
+            }
+        }
+    }
+}
+
+@Composable
+fun WordItem(word: Dictionary, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Text(
+            text = word.word,
+            modifier = Modifier.padding(16.dp),
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DictionaryDetailScreen(
+    word: Dictionary?,
+    onBackClick: () -> Unit,
+    onSpeak: (String) -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFEBF2FF))) {
+        TopAppBar(
+            title = {
+                Text("Kamus",
+                style = MaterialTheme.typography.headlineSmall
+                    ) },
+            navigationIcon = {
+                IconButton(onClick = onBackClick) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+        )
+
+        if (word == null) {
+            Text("Kata tidak ditemukan.", modifier = Modifier.padding(16.dp))
+        } else {
+            Column(modifier = Modifier.padding(24.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = word.word,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    IconButton(onClick = { onSpeak(word.word) }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.VolumeUp,
+                            contentDescription = "Ucapkan kata"
+                        )
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    onClick = { if (currentIndex > 0) currentIndex-- },
-                    enabled = currentIndex > 0
+                Text(text = "Definisi", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                Text(text = word.definition, style = MaterialTheme.typography.bodyMedium, lineHeight = 24.sp)
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(text = "Penggunaan dalam kalimat", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Previous")
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Previous")
-                }
-
-                Text(
-                    text = "${currentIndex + 1} / ${entries.size}",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                Button(
-                    onClick = { if (currentIndex < entries.size - 1) currentIndex++ },
-                    enabled = currentIndex < entries.size - 1
-                ) {
-                    Text("Next")
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Next")
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = word.example, style = MaterialTheme.typography.bodyMedium)
+                        Text(text = word.translation, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                    }
+                    IconButton(onClick = { onSpeak(word.example) }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.VolumeUp,
+                            contentDescription = "Ucapkan contoh kalimat"
+                        )
+                    }
                 }
             }
         }
     }
 }
+
+

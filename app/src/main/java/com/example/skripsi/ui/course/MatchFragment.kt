@@ -27,7 +27,6 @@ class MatchFragment : Fragment() {
                 val viewModel: MatchViewModel = viewModel(factory = factory)
 
                 AppTheme {
-                    // It simply calls the composable, which is now imported from the other file.
                     MatchScreen(
                         uiState = viewModel.uiState,
                         onWordBankChipClicked = viewModel::onWordBankChipClicked,

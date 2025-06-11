@@ -16,8 +16,7 @@ class ProfileAchievementsAdapter : ListAdapter<Achievement, ProfileAchievementsA
 
         fun bind(achievement: Achievement) {
             name.text = achievement.name
-            // Since the Achievement model doesn't have a specific icon, we'll use a static trophy icon
-            icon.setImageResource(R.drawable.bold_cup)
+            icon.setImageResource(R.drawable.asset_trophy)
         }
     }
 
@@ -32,7 +31,6 @@ class ProfileAchievementsAdapter : ListAdapter<Achievement, ProfileAchievementsA
     }
 }
 
-// DiffUtil helps RecyclerView update the list efficiently
 class AchievementDiffCallback : DiffUtil.ItemCallback<Achievement>() {
     override fun areItemsTheSame(oldItem: Achievement, newItem: Achievement): Boolean {
         return oldItem.id == newItem.id
