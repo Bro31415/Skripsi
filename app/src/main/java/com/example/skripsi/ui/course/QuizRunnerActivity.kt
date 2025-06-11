@@ -25,7 +25,9 @@ import com.example.skripsi.viewmodel.factory.QuizViewModelFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import android.speech.tts.TextToSpeech
+import android.widget.ImageButton
 import android.widget.Toast
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import java.util.Locale
 
 class QuizRunnerActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
@@ -36,6 +38,8 @@ class QuizRunnerActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         private val answers = mutableMapOf<Long, String>()
         private lateinit var tts: TextToSpeech
         private var isTtsReady = false
+        private lateinit var progressIndicator: LinearProgressIndicator
+        private lateinit var backButton: ImageButton
 
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +53,14 @@ class QuizRunnerActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 finish()
                 return
             }
+
+            progressIndicator = findViewById(R.id.quizProgressBar)
+            backButton = findViewById(R.id.backButton)
+
+            backButton.setOnClickListener {
+                finish() // TODO: ADD CONFIRMATION DIALOG
+            }
+
             quizId = quizIdLong.toString()
             tts = TextToSpeech(this, this)
 
@@ -78,6 +90,9 @@ class QuizRunnerActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 quizViewModel.startQuizTimer()
                 hasStartedQuiz = true
             }
+
+            progressIndicator.max = total
+            progressIndicator.setProgressCompat(index + 1, true)
 
             val savedAnswer = answers[question.id]
 

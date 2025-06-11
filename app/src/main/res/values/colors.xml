@@ -8,4 +8,6 @@
     <color name="gold">#FFD100</color>
     <color name="silver">#D7DBDE</color>
     <color name="bronze">#CD7F32</color>
+    <color name="correct">#1A9A5F</color>
+    <color name="wrong">#CC4D4D</color>
 </resources>
