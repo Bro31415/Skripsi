@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Latihan"
+            android:text="Profile"
             android:textColor="@android:color/black"
             style="@style/TextAppearance.Skripsi.Mattone.Large"
             />

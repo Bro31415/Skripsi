@@ -97,6 +97,12 @@
         <item name="android:textColor">#000000</item>
     </style>
 
+    <style name="Skripsi.Button.Reject" parent="Skripsi.Button.Base">
+        <item name="android:backgroundTint">#FF5555 </item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+
     <!-- Textbox -->
 
     <style name="Skripsi.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">

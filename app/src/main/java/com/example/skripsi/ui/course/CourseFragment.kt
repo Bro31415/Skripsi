@@ -202,7 +202,7 @@ fun LessonItem(lesson: Lesson, onClick: () -> Unit) {
             .clickable { onClick() },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Text(
             text = lesson.title,
