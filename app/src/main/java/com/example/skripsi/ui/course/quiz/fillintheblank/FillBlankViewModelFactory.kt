@@ -8,6 +8,7 @@ import com.example.skripsi.viewmodel.FillInTheBlankViewModel
 class FillInTheBlankViewModelFactory(
     private val question: Question
 ) : ViewModelProvider.Factory {
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FillInTheBlankViewModel::class.java)) {
@@ -16,3 +17,4 @@ class FillInTheBlankViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

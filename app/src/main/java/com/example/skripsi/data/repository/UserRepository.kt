@@ -1,5 +1,6 @@
 package com.example.skripsi.data.repository
 
+import Achievement
 import com.example.skripsi.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -7,10 +8,19 @@ import io.github.jan.supabase.postgrest.from
 import android.util.Log
 import android.util.Patterns
 import com.example.skripsi.data.model.User
+import com.example.skripsi.data.model.UserQuizAttempt
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
 import io.ktor.util.reflect.instanceOf
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.toLocalDateTime
 import java.lang.reflect.Array.set
 
 
@@ -166,6 +176,73 @@ class UserRepository {
                 Log.e("UserRepository", "Logout failed: ${e.message}")
                 false
             }
+        }
+    }
+
+    suspend fun calculateStreak(userId: String): Int {
+        return withContext(Dispatchers.IO) {
+            try {
+                val attempts = MyApp.supabase.from("user_quiz_attempts").select {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                    order("finished_at", Order.DESCENDING)
+                }.decodeList<UserQuizAttempt>()
+
+                if (attempts.isEmpty()) return@withContext 0
+
+                val systemTimeZone = TimeZone.currentSystemDefault()
+
+                val uniqueActivityDates = attempts
+                    .map { Instant.parse(it.finishedAt).toLocalDateTime(systemTimeZone).date }
+                    .toSet()
+
+                var streak = 0
+                val today = Clock.System.now().toLocalDateTime(systemTimeZone).date
+                var dateToCheck = today
+
+                if (!uniqueActivityDates.contains(today)) {
+                    dateToCheck = dateToCheck.minus(1, DateTimeUnit.DAY)
+                }
+
+                while (uniqueActivityDates.contains(dateToCheck)) {
+                    streak++
+                    dateToCheck = dateToCheck.minus(1, DateTimeUnit.DAY)
+                }
+                streak
+
+            } catch (e: Exception) {
+                Log.e("StreakCalc", "Error calculating streak", e)
+                0
+            }
+        }
+    }
+
+    suspend fun getUserAchievements(userId: String): List<Achievement> {
+        try {
+            val achievementKeys = MyApp.supabase.from("user_achievement")
+                .select(columns = Columns.list("achievement_key")) {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeList<Map<String, String>>()
+                .mapNotNull { it["achievement_key"] }
+            if (achievementKeys.isEmpty()) {
+                return emptyList()
+            }
+
+
+            return MyApp.supabase.from("achievements")
+                .select{
+                    filter{
+                        isIn("key", achievementKeys)
+                    }
+                }
+                .decodeList()
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Error fetching user achievements: ${e.message}")
+            return emptyList()
         }
     }
 }

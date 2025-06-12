@@ -1,14 +1,14 @@
 package com.example.skripsi.data.repository
 
+import UserAchievement
 import android.util.Log
-import com.example.skripsi.MyApp
 import com.example.skripsi.MyApp.Companion.supabase
 import com.example.skripsi.data.model.User
 import com.example.skripsi.data.model.UserQuizAttempt
+import com.example.skripsi.data.model.UserXp
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -40,7 +40,7 @@ class UserProgressRepository(
                     filter {
                         eq("id", userId)
                     }
-                }.decodeSingleOrNull<User>()
+                }.decodeSingleOrNull<UserXp>()
 
             val newXp = (currentXp?.xp ?: 0) + xpToAdd
 
@@ -57,22 +57,40 @@ class UserProgressRepository(
         }
     }
 
-    suspend fun resetUserXp(userId: String): Boolean {
-        return withContext(Dispatchers.IO) {
-            try {
-                supabaseClient.postgrest.from("users").update({
-                    set("xp", 0L)
-                }) {
+    suspend fun unlockAchievement(userId: String, achievementKey: String): Boolean {
+        return try {
+            val unlockedAt = kotlinx.datetime.Clock.System.now().toString()
+
+            supabase.from("user_achievement")
+                .insert(
+                    mapOf(
+                        "user_id" to userId,
+                        "achievement_key" to achievementKey,
+                        "unlocked_at" to unlockedAt
+                    )
+                )
+            true
+        } catch (e: Exception) {
+            Log.e("UserProgressRepo", "Failed to unlock achievement", e)
+            false
+        }
+    }
+
+    suspend fun isAchievementUnlocked(userId: String, achievementKey: String): Boolean {
+        return try {
+            val result = supabase.from("user_achievement")
+                .select {
                     filter {
-                        eq("id", userId)
+                        eq("user_id", userId)
+                        eq("achievement_key", achievementKey)
                     }
+                    limit(1)
                 }
-                Log.d("UserRepository", "XP reset successful for userId: $userId")
-                true
-            } catch (e: Exception) {
-                Log.e("UserRepository", "Failed to reset XP: ${e.message}")
-                false
-            }
+                .decodeList<UserAchievement>()
+            result.isNotEmpty()
+        } catch (e: Exception) {
+            Log.e("UserProgressRepo", "Failed to check achievement", e)
+            false
         }
     }
 

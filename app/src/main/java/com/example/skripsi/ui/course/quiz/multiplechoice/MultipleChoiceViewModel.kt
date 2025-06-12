@@ -1,35 +1,46 @@
-package com.example.skripsi.ui.course.quiz.multiplechoice
-
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.skripsi.data.model.Question
 
+@Immutable
+data class MultipleChoiceUiState(
+    val questionText: String,
+    val options: List<String>,
+    val correctAnswer: String,
+    val selectedAnswer: String? = null,
+    val isSubmitted: Boolean = false,
+    val isCorrect: Boolean? = null
+)
+
 class MultipleChoiceViewModel(
-    private val question: Question,
-    private val initialAnswer: String?,
-    private val onAnswerSelected: (String) -> Unit
+    val question: Question
 ) : ViewModel() {
 
-    // soal & opsi
-    val questionText: String = question.questionText
-    val options: List<String> = question.options.orEmpty()
-    private val correctAnswer: String = question.answer
-
-    // state jawaban
-    var selectedAnswer by mutableStateOf<String?>(initialAnswer)
+    var uiState by mutableStateOf(
+        MultipleChoiceUiState(
+            questionText = question.questionText,
+            options = question.options.orEmpty(),
+            correctAnswer = question.answer
+        )
+    )
         private set
 
-    var isAnswerCorrect by mutableStateOf<Boolean?>(initialAnswer?.let { it == correctAnswer })
-        private set
-
-    // dipanggil saat user pilih opsi
-    fun selectAnswer(answer: String) {
-        if (selectedAnswer == null) {
-            selectedAnswer = answer
-            isAnswerCorrect = answer == correctAnswer
-            onAnswerSelected(answer)
+    fun onAnswerSelected(option: String) {
+        if (!uiState.isSubmitted) {
+            uiState = uiState.copy(selectedAnswer = option)
         }
+    }
+
+    fun onSubmit() {
+        if (uiState.selectedAnswer == null) return
+
+        val isAnswerCorrect = uiState.selectedAnswer == question.answer
+        uiState = uiState.copy(
+            isSubmitted = true,
+            isCorrect = isAnswerCorrect
+        )
     }
 }

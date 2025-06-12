@@ -1,5 +1,6 @@
 package com.example.skripsi.viewmodel
 
+import Achievement
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,12 +12,17 @@ import com.example.skripsi.data.model.User
 import com.example.skripsi.data.repository.UserRepository
 import com.example.skripsi.utils.isEmailValid
 import io.github.jan.supabase.auth.auth
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     private val _resetPasswordResult = MutableLiveData<Result<Unit>>()
     val resetPasswordResult: LiveData<Result<Unit>> get() = _resetPasswordResult
+
+    private val _studyStreak = MutableStateFlow<Int?>(null)
+    val studyStreak = _studyStreak.asStateFlow()
 
     fun signUp(username: String, email: String, password: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
@@ -74,4 +80,18 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
             }
         }
     }
+
+    fun loadUserAchievements(userId: String, onResult: (List<Achievement>) -> Unit) {
+        viewModelScope.launch {
+            val achievements = userRepository.getUserAchievements(userId)
+            onResult(achievements)
+        }
+    }
+
+    fun loadStudyStreak(userId: String) {
+        viewModelScope.launch {
+            _studyStreak.value = userRepository.calculateStreak(userId)
+        }
+    }
+
 }

@@ -5,11 +5,34 @@ import com.example.skripsi.data.model.Chapter
 import com.example.skripsi.data.model.ChapterWithQuizzes
 import com.example.skripsi.data.model.Question
 import com.example.skripsi.data.model.Quiz
+import com.example.skripsi.data.model.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 
 class CourseRepository (private val supabase: SupabaseClient) {
+
+    suspend fun getChapters(): List<Chapter> {
+        return try {
+            supabase.from("chapter")
+                .select()
+                .decodeList<Chapter>()
+        } catch (e: Exception) {
+            Log.e("CourseRepo", "Failed to fetch chapters", e)
+            emptyList()
+        }
+    }
+
+    suspend fun getChapterById(chapterId: Long): Chapter? {
+        return try {
+            supabase.from("chapter").select {
+                filter { eq("id", chapterId) }
+            }.decodeSingleOrNull<Chapter>()
+        } catch (e: Exception) {
+            Log.e("CourseRepo", "Failed to fetch chapter by id: $chapterId", e)
+            null
+        }
+    }
 
     suspend fun getChaptersWithQuizzes(): List<ChapterWithQuizzes> {
         return try {
@@ -53,7 +76,9 @@ class CourseRepository (private val supabase: SupabaseClient) {
                     "answer",
                     "options",
                     "xp",
-                    "created_at")) {
+                    "created_at",
+                    "sentence")) {
+
                     filter {
                         eq("quiz_id", quizId)
                     }
@@ -62,6 +87,20 @@ class CourseRepository (private val supabase: SupabaseClient) {
         } catch (e: Exception) {
             Log.e("CourseRepo", "Failed to fetch questions for quiz $quizId", e)
             emptyList()
+        }
+    }
+
+    suspend fun getUserProfile(userId: String): User? {
+        return try {
+            supabase.from("users")
+                .select {
+                    filter {
+                        eq("id", userId)
+                    }
+                }.decodeSingleOrNull<User>()
+        } catch (e: Exception) {
+            Log.e("CourseRepository", "Error fetching user profile", e)
+            null
         }
     }
 }

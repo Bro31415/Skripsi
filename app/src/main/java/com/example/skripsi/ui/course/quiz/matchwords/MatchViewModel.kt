@@ -1,5 +1,6 @@
 package com.example.skripsi.viewmodel
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,44 +8,58 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import com.example.skripsi.data.model.Question
 
-class MatchViewModel(private val question: Question) : ViewModel() {
+@Immutable
+data class MatchUiState(
+    val questionText: String,
+    val wordBankOptions: List<String>,
+    val selectedAnswerWords: List<String> = emptyList(),
+    val isSubmitted: Boolean = false,
+    val isCorrect: Boolean? = null
+)
 
-    private val _wordList = question.options
-    val wordList: List<String>? get() = _wordList
-    val questionText: String = question.questionText
+class MatchViewModel(val question: Question) : ViewModel() {
 
-    var selectedWords by mutableStateOf(listOf<String>())
+    var uiState by mutableStateOf(createInitialState())
         private set
 
-    private val correctSentence = question.answer
-
-    var isAnswerCorrect by mutableStateOf<Boolean?>(null)
-        private set
-
-    fun selectWord(word: String) {
-        if (word !in selectedWords) {
-            selectedWords = selectedWords + word
-            updateAnswerStatus()
-        }
+    private fun createInitialState(): MatchUiState {
+        return MatchUiState(
+            questionText = question.questionText,
+            wordBankOptions = question.options.orEmpty().shuffled()
+        )
     }
 
-    fun removeWord(word: String) {
-        selectedWords = selectedWords - word
-        isAnswerCorrect = null
+
+    fun onWordBankChipClicked(word: String) {
+        if (uiState.isSubmitted) return
+
+        val newSelectedWords = uiState.selectedAnswerWords + word
+        val newWordBank = uiState.wordBankOptions - word
+        uiState = uiState.copy(
+            selectedAnswerWords = newSelectedWords,
+            wordBankOptions = newWordBank
+        )
     }
 
-    private fun updateAnswerStatus() {
-        val userSentence = selectedWords.joinToString(" ").replace(" ?", "?") // TODO: replace this hardcoded piece for joining strings
-        isAnswerCorrect = userSentence == correctSentence
+    fun onAnswerChipClicked(word: String) {
+        if (uiState.isSubmitted) return
+
+        val newSelectedWords = uiState.selectedAnswerWords - word
+        val newWordBank = uiState.wordBankOptions + word
+        uiState = uiState.copy(
+            selectedAnswerWords = newSelectedWords,
+            wordBankOptions = newWordBank
+        )
     }
 
-    fun checkAnswer(): Boolean {
-        val userSentence = selectedWords.joinToString(" ").replace(" ?", "?") // TODO: replace this hardcoded piece for joining strings
-        return userSentence == correctSentence
-    }
+    fun onSubmit() {
+        if (uiState.selectedAnswerWords.isEmpty()) return
+        val userAnswer = uiState.selectedAnswerWords.joinToString(" ")
+        val isAnswerCorrect = userAnswer.equals(question.answer, ignoreCase = true)
 
-    fun reset() {
-        selectedWords = emptyList()
-        isAnswerCorrect = null
+        uiState = uiState.copy(
+            isSubmitted = true,
+            isCorrect = isAnswerCorrect
+        )
     }
 }

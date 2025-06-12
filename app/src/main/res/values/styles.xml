@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Fonts -->
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.Small" parent="">
+        <item name="android:fontFamily">@font/plusjkt_regular</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.SmallSemi" parent="">
+        <item name="android:fontFamily">@font/plusjkt_semibold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.MediumSecondary" parent="">
+        <item name="android:fontFamily">@font/plusjkt_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.Large" parent="">
+        <item name="android:fontFamily">@font/plusjkt_bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.BottomNavActive" parent="">
+        <item name="android:fontFamily">@font/plusjkt_bold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.BottomNavInactive" parent="">
+        <item name="android:fontFamily">@font/plusjkt_semibold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.Medium" parent="">
+        <item name="android:fontFamily">@font/plusjkt_semibold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.PlusJakarta.SemiLarge" parent="">
+        <item name="android:fontFamily">@font/plusjkt_bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+
+    <style name="TextAppearance.Skripsi.Mattone" parent="">
+        <item name="android:fontFamily">@font/mattone</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.Mattone.Large" parent="">
+        <item name="android:fontFamily">@font/mattone</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.ClimateCrisis.Logo" parent="">
+        <item name="android:fontFamily">@font/climatecrisis</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">64sp</item>
+    </style>
+
+    <style name="TextAppearance.Skripsi.Mattone.PageHeading" parent="">
+        <item name="android:fontFamily">@font/mattone</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    
+    <style name="TextAppearance.Skripsi.ToolbarTitle" parent="">
+        <item name="android:fontFamily">@font/mattone</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Buttons -->
+
+    <style name="ShapeAppearance.Skripsi.Button.Pill" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="Skripsi.Button.Base" parent="Widget.Material3.Button">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Skripsi.Button.Pill</item>
+
+        <item name="android:fontFamily">@font/mattone</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Skripsi.Button.Normal" parent="Skripsi.Button.Base">
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Skripsi.Button.Confirmation" parent="Skripsi.Button.Base">
+        <item name="android:backgroundTint">#6AFF8A </item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="Skripsi.Button.Reject" parent="Skripsi.Button.Base">
+        <item name="android:backgroundTint">#FF5555 </item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+
+    <!-- Textbox -->
+
+    <style name="Skripsi.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxBackgroundColor">@android:color/transparent</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+
+    <style name="Widget.Skripsi.TextInputEditText" parent="">
+        <item name="android:background">@drawable/edit_text_background</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Skripsi.PlusJakarta.Medium</item>
+    </style>
+
+    <!-- Shapes -->
+
+    <style name="ShapeAppearance.Skripsi.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+</resources>

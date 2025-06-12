@@ -1,39 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp"
-    tools:context=".ui.course.QuizResultActivity">
+    tools:context=".ui.course.QuizResultActivity"
+    android:background="@color/correct"
+    android:padding="16dp"
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Selamet, nya! Latihanmu sudah selesai."
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:paddingBottom="16dp"
-        android:textAlignment="center"
-        />
+    <nl.dionsegijn.konfetti.xml.KonfettiView
+        android:id="@+id/konfettiView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/xpText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Jumlah XP yang didapat : 0"
-        android:textSize="20sp"
-        android:paddingBottom="24dp"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
 
-    <Button
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/asset_score"
+            android:contentDescription="Skor Icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bérés, euy!"
+            style="@style/TextAppearance.Skripsi.Mattone.Large"
+            android:paddingBottom="16dp"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kamu mendapatkan:"
+            style="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/xpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            style="@style/TextAppearance.Skripsi.PlusJakarta.SemiLarge"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:paddingBottom="24dp"
+            tools:text="10 XP" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Keluar"
-        />
-    
-</LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:text="Lanjut"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/green"
+        app:cornerRadius="15dp"
+        style="@style/TextAppearance.Skripsi.PlusJakarta.Medium"/>
+
+</RelativeLayout>

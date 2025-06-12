@@ -1,84 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".ui.auth.SignInActivity">
+    tools:context=".ui.auth.SignInActivity"
+    android:background="@color/light_blue"
+    >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Masuk"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/TextAppearance.Skripsi.ToolbarTitle"
+        app:navigationIcon="@drawable/outline_arrow_left" />
 
     <TextView
         android:id="@+id/tv_email"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
-        android:text="Email" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="Email"
+        android:textAppearance="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <EditText
-        android:id="@+id/et_email"
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailTextInputLayout"
+        style="@style/Skripsi.TextInputLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginVertical="10dp" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@id/tv_email"
+        app:layout_constraintStart_toStartOf="@id/tv_email"
+        app:layout_constraintTop_toBottomOf="@id/tv_email">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email"
+            style="@style/Widget.Skripsi.TextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:background="@color/white"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_password"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="5dp"
-        android:text="Password" />
+        android:layout_marginTop="16dp"
+        android:text="Password"
+        android:textAppearance="@style/TextAppearance.Skripsi.PlusJakarta.Medium"
+        app:layout_constraintEnd_toEndOf="@id/emailTextInputLayout"
+        app:layout_constraintStart_toStartOf="@id/emailTextInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/emailTextInputLayout" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginBottom="16dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        >
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordTextInputLayout"
+        style="@style/Skripsi.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@id/tv_password"
+        app:layout_constraintStart_toStartOf="@id/tv_password"
+        app:layout_constraintTop_toBottomOf="@id/tv_password"
+        app:passwordToggleEnabled="true">
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_password"
-            android:layout_width="0dp"
+            style="@style/Widget.Skripsi.TextInputEditText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:hint="Enter Password"
-            android:imeOptions="actionDone"
             android:inputType="textPassword"
-            android:fontFamily="sans-serif"
-            />
+                android:background="@color/white"/>
 
-        <ImageButton
-            android:id="@+id/btn_togglePassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/bold_eye_closed"
-            />
-
-    </LinearLayout>
-
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_signin"
-        android:layout_width="wrap_content"
+        style="@style/Skripsi.Button.Confirmation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="53dp"
-        android:layout_marginHorizontal="80dp"
-        android:layout_marginVertical="5dp"
-        android:text="Sign In"
-        />
+        android:layout_marginTop="32dp"
+        android:text="Masuk"
+        app:layout_constraintEnd_toEndOf="@id/passwordTextInputLayout"
+        app:layout_constraintStart_toStartOf="@id/passwordTextInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/passwordTextInputLayout" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_forgotpassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Forgot Password"
-        />
+        android:layout_marginTop="16dp"
+        android:text="Lupa Password?"
+        android:textAppearance="@style/TextAppearance.Skripsi.Mattone"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="@id/btn_signin"
+        app:layout_constraintStart_toStartOf="@id/btn_signin"
+        app:layout_constraintTop_toBottomOf="@id/btn_signin" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
