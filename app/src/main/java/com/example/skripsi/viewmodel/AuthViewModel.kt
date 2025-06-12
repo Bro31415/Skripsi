@@ -24,6 +24,12 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _studyStreak = MutableStateFlow<Int?>(null)
     val studyStreak = _studyStreak.asStateFlow()
 
+    private val _logoutResult = MutableLiveData<Boolean>()
+    val logoutResult: LiveData<Boolean> = _logoutResult
+
+    private val _resetProgressResult = MutableLiveData<Boolean>()
+    val resetProgressResult: LiveData<Boolean> = _resetProgressResult
+
     fun signUp(username: String, email: String, password: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
             val success = userRepository.signUpUser(email, password)
@@ -41,6 +47,13 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
         viewModelScope.launch {
             val success = userRepository.signInUser(email, password)
             onResult(success)
+        }
+    }
+
+    fun logoutUser() {
+        viewModelScope.launch {
+            val success = userRepository.logoutUser()
+            _logoutResult.postValue(success)
         }
     }
 
@@ -91,6 +104,18 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     fun loadStudyStreak(userId: String) {
         viewModelScope.launch {
             _studyStreak.value = userRepository.calculateStreak(userId)
+        }
+    }
+
+    fun resetUserProgress() {
+        viewModelScope.launch {
+            val userId = MyApp.supabase.auth.currentUserOrNull()?.id
+            if (userId != null) {
+                val success = userRepository.resetUserProgress(userId)
+                _resetProgressResult.postValue(success)
+            } else {
+                _resetProgressResult.postValue(false)
+            }
         }
     }
 

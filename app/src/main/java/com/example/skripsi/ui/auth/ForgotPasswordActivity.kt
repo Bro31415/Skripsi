@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -34,8 +35,14 @@ class ForgotPasswordActivity : AppCompatActivity() {
         var etEmail = findViewById<EditText>(R.id.et_forgotPassword)
         var btnReset = findViewById<Button>(R.id.btn_resetPassword)
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+
         val userRepository = UserRepository()
         val authViewModel: AuthViewModel by viewModels { AuthViewModelFactory(userRepository) }
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         btnReset.setOnClickListener{
             val email = etEmail.text.toString().trim()

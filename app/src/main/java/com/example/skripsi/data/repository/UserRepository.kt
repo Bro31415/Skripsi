@@ -245,4 +245,37 @@ class UserRepository {
             return emptyList()
         }
     }
+
+    suspend fun resetUserProgress(userId: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                MyApp.supabase.from("user_achievement").delete {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+
+                MyApp.supabase.from("user_quiz_attempt").delete {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+
+                MyApp.supabase.from("users").update({
+                    val newXp: Int = 0
+                    set("xp", newXp)
+                }) {
+                    filter {
+                        eq("id", userId)
+                    }
+                }
+                Log.d("UserRepository", "Successfully reset progress for user $userId")
+                true
+            } catch (e: Exception) {
+                Log.e("UserRepository", "Failed to reset user progress", e)
+                false
+            }
+
+        }
+    }
 }
