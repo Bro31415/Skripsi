@@ -21,6 +21,7 @@ import com.example.skripsi.R
 import com.example.skripsi.data.repository.UserRepository
 import com.example.skripsi.viewmodel.AuthViewModel
 import com.example.skripsi.viewmodel.factory.AuthViewModelFactory
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,9 @@ class ForgotPasswordActivity : AppCompatActivity() {
         var etEmail = findViewById<EditText>(R.id.et_forgotPassword)
         var btnReset = findViewById<Button>(R.id.btn_resetPassword)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+
+        setSupportActionBar(toolbar)
 
         val userRepository = UserRepository()
         val authViewModel: AuthViewModel by viewModels { AuthViewModelFactory(userRepository) }

@@ -15,19 +15,17 @@ class AchievementAdapter(private val achievements: List<Achievement>) :
 
     class AchievementViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameTextView: TextView = view.findViewById(R.id.tv_achievement_name)
-        val descriptionTextView: TextView = view.findViewById(R.id.tv_achievement_description)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AchievementViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_achievement, parent, false)
+            .inflate(R.layout.item_achievement_card, parent, false)
         return AchievementViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
         val achievement = achievements[position]
         holder.nameTextView.text = achievement.name
-        holder.descriptionTextView.text = achievement.description
     }
 
     override fun getItemCount() = achievements.size

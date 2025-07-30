@@ -120,7 +120,6 @@ class UserRepository {
 
                 // Tambahkan log untuk memeriksa data user
                 Log.d("UserProfile", "User data: $user")
-
                 user
             } catch (e: Exception) {
                 Log.e("UserProfile", "Failed to fetch user profile: ${e.message}")
@@ -182,7 +181,7 @@ class UserRepository {
     suspend fun calculateStreak(userId: String): Int {
         return withContext(Dispatchers.IO) {
             try {
-                val attempts = MyApp.supabase.from("user_quiz_attempts").select {
+                val attempts = MyApp.supabase.from("user_quiz_attempt").select {
                     filter {
                         eq("user_id", userId)
                     }

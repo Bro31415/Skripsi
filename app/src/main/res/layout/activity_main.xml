@@ -36,7 +36,7 @@
 
     <TextView
         android:id="@+id/tv_signup"
-        android:text="Baru mengenal SundaKu?"
+        android:text="Baru mengenal AjarSunda?"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

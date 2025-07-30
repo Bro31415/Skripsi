@@ -1,26 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5"
+    android:background="#E6F0FF"
     tools:context=".ui.AchievementsFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_achievements"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:title="Semua Pencapaian"
-        app:titleTextColor="@android:color/white" />
+        app:title="Pencapaian"
+        app:titleTextAppearance="@style/TextAppearance.Skripsi.Mattone.Large"
+        app:titleTextColor="@android:color/black"
+        app:navigationIcon="@drawable/outline_arrow_left" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_achievements"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_achievement" />
+        android:padding="10dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_achievement_card" />
 
 </LinearLayout>

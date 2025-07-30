@@ -97,6 +97,17 @@
         app:layout_constraintStart_toStartOf="@id/passwordTextInputLayout"
         app:layout_constraintTop_toBottomOf="@id/passwordTextInputLayout" />
 
+    <Button
+        android:id="@+id/btn_signinGoogle"
+        style="@style/Skripsi.Button.Normal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Masuk Menggunakan Google"
+        app:layout_constraintEnd_toEndOf="@id/btn_signin"
+        app:layout_constraintStart_toStartOf="@id/btn_signin"
+        app:layout_constraintTop_toBottomOf="@id/btn_signin" />
+
     <TextView
         android:id="@+id/btn_forgotpassword"
         android:layout_width="wrap_content"
@@ -105,9 +116,9 @@
         android:text="Lupa Password?"
         android:textAppearance="@style/TextAppearance.Skripsi.Mattone"
         android:background="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="@id/btn_signin"
-        app:layout_constraintStart_toStartOf="@id/btn_signin"
-        app:layout_constraintTop_toBottomOf="@id/btn_signin" />
+        app:layout_constraintEnd_toEndOf="@id/btn_signinGoogle"
+        app:layout_constraintStart_toStartOf="@id/btn_signinGoogle"
+        app:layout_constraintTop_toBottomOf="@id/btn_signinGoogle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
