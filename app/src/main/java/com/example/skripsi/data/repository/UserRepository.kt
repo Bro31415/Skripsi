@@ -209,7 +209,6 @@ class UserRepository {
                     dateToCheck = dateToCheck.minus(1, DateTimeUnit.DAY)
                 }
                 streak
-
             } catch (e: Exception) {
                 Log.e("StreakCalc", "Error calculating streak", e)
                 0
@@ -274,7 +273,6 @@ class UserRepository {
                 Log.e("UserRepository", "Failed to reset user progress", e)
                 false
             }
-
         }
     }
 }

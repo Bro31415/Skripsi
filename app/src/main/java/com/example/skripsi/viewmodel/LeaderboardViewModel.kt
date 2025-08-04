@@ -13,9 +13,7 @@ class LeaderboardViewModel(private val userRepository: UserRepository) : ViewMod
     private val _topUsers = MutableLiveData<List<User>>()
     val topUsers: LiveData<List<User>> = _topUsers
 
-    // Assume you have a way to get the current user's ID
-    val currentUserId: String =
-        "some_current_user_id" // TODO: Replace with actual logged-in user ID
+    val currentUserId: String = ""
 
     init {
         loadLeaderboard()
@@ -24,13 +22,10 @@ class LeaderboardViewModel(private val userRepository: UserRepository) : ViewMod
     private fun loadLeaderboard() {
         viewModelScope.launch {
             try {
-                // Fetch top 15 users as per your design
                 _topUsers.value = userRepository.getTopUsers(limit = 15)
             } catch (e: Exception) {
-                // Handle error
                 _topUsers.value = emptyList()
             }
         }
     }
 }
-
